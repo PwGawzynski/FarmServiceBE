@@ -2,6 +2,7 @@
  * Enum used to define possible responseObject codes
  */
 export enum ResponseCode {
+  ErrorOccurred,
   ProcessedCorrect,
   ProcessedWithoutConfirmationWaiting,
 }

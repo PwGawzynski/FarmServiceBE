@@ -1,10 +1,11 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { Request} from "express";
+import {CreateUserDto} from './dto/create-user.dto';
+import {Request} from "express";
 import {User} from "./entities/user.entity";
 import {Account} from "./entities/account.entity";
 import {UserPersonalData} from "./entities/userPersonalData.entity";
 import {Address} from "../commonEntities/address.entity";
+import {ResponseCode, ResponseObject} from "../../types/respnse/responseGeneric";
 
 @Injectable()
 export class UserService {
@@ -66,11 +67,15 @@ export class UserService {
         newAccount.user = Promise.resolve(newUser);
         newUserPersonalData.user = Promise.resolve(newUser);
         newAddress.user = Promise.resolve(newUser);
-
+ 
         await newUser.save();
         newAddress.save();
         newAccount.save();
         newUserPersonalData.save();
+
+        return {
+            code: ResponseCode.ProcessedWithoutConfirmationWaiting
+        } as ResponseObject;
 
     }
 }

@@ -1,13 +1,19 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { Request} from "express";
+import {CreateUserDto} from './dto/create-user.dto';
+import {Request} from "express";
 import {User} from "./entities/user.entity";
 import {Account} from "./entities/account.entity";
 import {UserPersonalData} from "./entities/userPersonalData.entity";
 import {Address} from "../commonEntities/address.entity";
+import {ResponseCode, ResponseObject} from "../../types/respnse/responseGeneric";
 
 @Injectable()
 export class UserService {
+    /**
+     * Method which extracts information about userID from req object
+     * @param req - req object from express
+     * @throws HttpException when userId property is inaccessible
+     */
     _getUserIdFromReq(req: Request): string {
         const userId = req.user['userId'];
         if (!userId)
@@ -15,6 +21,11 @@ export class UserService {
         return userId;
     }
 
+    /**
+     * Method which validate if given user already exist
+     * @param createUserData
+     * @throws HttpException when user already exist
+     */
     async _validateUser(createUserData: CreateUserDto) {
         const result = await User.findOne({
             where: [
@@ -34,6 +45,12 @@ export class UserService {
                 HttpStatus.CONFLICT,
             );
     }
+
+    /**
+     * Method which creates new user witch its connected entities like account, address and so on, and save this entities in db
+     * @param createUserDto - DTO object contains data specified by DTO
+     * @param req -req object from express
+     */
     async create(createUserDto: CreateUserDto, req: Request) {
         const userId =  this._getUserIdFromReq(req);
 
@@ -71,6 +88,10 @@ export class UserService {
         newAddress.save();
         newAccount.save();
         newUserPersonalData.save();
+
+        return {
+            code: ResponseCode.ProcessedWithoutConfirmationWaiting
+        } as ResponseObject;
 
     }
 }

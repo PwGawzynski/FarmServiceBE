@@ -1,5 +1,8 @@
 import {IsNotEmpty, IsString, Length} from "class-validator";
 
+/**
+ * This DTO contains information about userPersonalData entity properties types
+ */
 export class CreateUserPersonalDataDto {
     @IsString({
         message: "User name must be string type"

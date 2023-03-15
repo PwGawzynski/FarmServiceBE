@@ -7,6 +7,8 @@ import configuration from "../config/configuration";
 import { UserModule } from './user/user.module';
 import * as process from 'process';
 import {TypeOrmModule} from "@nestjs/typeorm";
+import {APP_FILTER} from "@nestjs/core";
+import {GlobalExceptionFilter} from "../ExceptionFilters/GlobalFilter";
 
 @Module({
   imports: [
@@ -28,6 +30,9 @@ import {TypeOrmModule} from "@nestjs/typeorm";
       UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, {
+    provide: APP_FILTER,
+    useClass: GlobalExceptionFilter,
+  },],
 })
 export class AppModule {}

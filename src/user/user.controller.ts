@@ -8,6 +8,11 @@ import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  /**
+   * Method to register new user
+   * @param createUserDto - DTO with register data
+   * @param req - req obj from express
+   */
   @Post()
   @UseGuards(JwtAuthGuard)
   create(@Body() createUserDto : CreateUserDto, @Req() req : Request){

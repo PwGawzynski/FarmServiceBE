@@ -4,6 +4,9 @@ import {CreateAddressDto} from "../../commonEntities/commonEntitiesDTOs/create-a
 import {CreateAccountDto} from "./create-account.dto";
 import {Type} from "class-transformer";
 
+/**
+ * This DTO contains information about User entity properties types
+ */
 export class CreateUserDto {
     @IsString({
         message: "User login/email/nip must be string type"

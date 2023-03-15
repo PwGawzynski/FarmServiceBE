@@ -1,5 +1,8 @@
 import {IsNotEmpty, IsOptional, IsString, Length, Matches} from "class-validator";
 
+/**
+ * This DTO represent all address entities in application
+ */
 export class CreateAddressDto{
     @IsString({
         message: "City must be string type"

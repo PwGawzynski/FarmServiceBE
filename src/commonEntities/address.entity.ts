@@ -1,6 +1,9 @@
 import {BaseEntity, Column, Entity, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 import {User} from "../user/entities/user.entity";
 
+/**
+ * This column represents all address in application, is used to store both user and company addresses
+ */
 @Entity()
 export class Address extends BaseEntity{
     @PrimaryGeneratedColumn('uuid')

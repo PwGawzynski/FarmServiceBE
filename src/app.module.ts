@@ -9,6 +9,9 @@ import * as process from 'process';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {APP_FILTER} from "@nestjs/core";
 import {GlobalExceptionFilter} from "../ExceptionFilters/GlobalFilter";
+import { MailingModule } from './mailing/mailing.module';
+import {MailerModule} from "@nestjs-modules/mailer";
+import {HandlebarsAdapter} from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
 
 @Module({
   imports: [
@@ -28,6 +31,17 @@ import {GlobalExceptionFilter} from "../ExceptionFilters/GlobalFilter";
     }),
       AuthModule,
       UserModule,
+      MailingModule,
+      MailerModule.forRoot({
+      transport: 'smtps://user@domain.com:pass@smtp.domain.com',
+      template: {
+        dir: process.cwd() + '/mailTemplates/',
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, {

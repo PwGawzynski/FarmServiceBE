@@ -1,4 +1,4 @@
-import {Body, Controller, Post, Req, UseGuards} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Req, UseGuards} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Request} from "express";
@@ -18,5 +18,11 @@ export class UserController {
   create(@Body() createUserDto : CreateUserDto, @Req() req : Request){
     console.log(createUserDto);
     return this.userService.create(createUserDto, req);
+  }
+
+  @Get('activate/:activationCode')
+  activate(@Param('activationCode') activationCode){
+    console.log(activationCode);
+    return this.userService.activate(activationCode);
   }
 }

@@ -1,3 +1,4 @@
+
 import {
   ArgumentsHost,
   Catch,
@@ -40,8 +41,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     } else
       httpAdapter.reply(
         ctx.getResponse(),
-        {},
+        {
+          code: ResponseCode.ErrorOccurred,
+        } as ResponseObject,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    console.log(exception);
   }
 }

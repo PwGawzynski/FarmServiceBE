@@ -5,7 +5,13 @@ import {User} from "./entities/user.entity";
 import {Account} from "./entities/account.entity";
 import {UserPersonalData} from "./entities/userPersonalData.entity";
 import {Address} from "../commonEntities/address.entity";
-import {ResponseCode, ResponseObject} from "../../types/respnse/responseGeneric";
+import {ResponseCode, ResponseObject} from "../../FarmServiceTypes/respnse/responseGeneric";
+
+interface DataFromReq{
+    userLogin: string;
+    userId:string;
+
+}
 
 @Injectable()
 export class UserService {
@@ -14,11 +20,12 @@ export class UserService {
      * @param req - req object from express
      * @throws HttpException when userId property is inaccessible
      */
-    _getUserIdFromReq(req: Request): string {
+    _getUserIdFromReq(req: Request): DataFromReq {
         const userId = req.user['userId'];
+        const userLogin = req.user['userLogin'];
         if (!userId)
             throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-        return userId;
+        return {userId, userLogin};
     }
 
     /**
@@ -52,7 +59,7 @@ export class UserService {
      * @param req -req object from express
      */
     async create(createUserDto: CreateUserDto, req: Request) {
-        const userId =  this._getUserIdFromReq(req);
+        const {userId, userLogin} =  this._getUserIdFromReq(req);
 
         await this._validateUser(createUserDto);
 
@@ -62,8 +69,9 @@ export class UserService {
         const newAddress = new Address();
 
         newUser.id  = userId;
-        newUser.userLoginIdentificator = createUserDto.userLoginIdentificator;
+        newUser.userLoginIdentificator = userLogin;
         newUser.email = createUserDto.email;
+        newUser.role = createUserDto.userRole;
 
         newAccount.theme = createUserDto.accountData.theme;
 

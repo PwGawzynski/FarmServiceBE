@@ -1,9 +1,10 @@
 import {IsNotEmpty, IsString, Length} from "class-validator";
+import {UserPersonalDataTransferObjectI} from "../../../FarmServiceTypes/User/RegisterNewUserDataDtoInterfaceMobi";
 
 /**
  * This DTO contains information about userPersonalData entity properties types
  */
-export class CreateUserPersonalDataDto {
+export class CreateUserPersonalDataDto implements UserPersonalDataTransferObjectI{
     @IsString({
         message: "User name must be string type"
     })
@@ -31,6 +32,5 @@ export class CreateUserPersonalDataDto {
     })
     @Length(0,12)
     phoneNumber:string;
-
 
 }

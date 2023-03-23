@@ -1,8 +1,15 @@
-import {ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus,} from '@nestjs/common';
-import {HttpAdapterHost} from '@nestjs/core';
-import {ResponseCode, ResponseObject} from '../types/respnse/responseGeneric';
-import {printWarnToConsole} from '../Helpers/printWarnToConsole';
-import {ErrorPayloadObject} from "../types/respnse/errorPayloadObject";
+
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { HttpAdapterHost } from '@nestjs/core';
+import { printWarnToConsole } from '../Helpers/printWarnToConsole';
+import {ResponseCode, ResponseObject} from "../FarmServiceTypes/respnse/responseGeneric";
+import {ErrorPayloadObject} from "../FarmServiceTypes/respnse/errorPayloadObject";
 
 /**
  * Global exception filter, used to filter any exception occurred in app, and send back user-friendly response witch only save for app information
@@ -15,9 +22,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const { httpAdapter } = this.httpAdapterHost;
 
     const ctx = host.switchToHttp();
-
     printWarnToConsole(`CAUGHT ERROR`, 'GlobalExceptionFilter');
-
     /**
      *  Checks exception type and send bask ResponseObject with error code and payload if error is HttpException type,
      *  or ResponseObject with only error code, in case of the others error types, to prevent app structure data leaking

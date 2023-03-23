@@ -5,8 +5,8 @@ import {google} from "googleapis";
 import {Options} from 'nodemailer/lib/smtp-transport';
 import * as process from "process";
 import {printWarnToConsole} from "../../Helpers/printWarnToConsole";
-import {SendMailSettingsObject} from "../../types/mailing/sendMailSettingsObject";
-import {ResponseCode, ResponseObject} from "../../types/respnse/responseGeneric";
+import {ResponseCode, ResponseObject} from "../../FarmServiceTypes/respnse/responseGeneric";
+import {SendMailSettingsObject} from "../../InternalTypes/mailing/sendMailSettingsObject";
 
 @Injectable()
 export class MailingService {

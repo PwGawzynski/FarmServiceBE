@@ -9,6 +9,7 @@ import {
 import { Account } from './account.entity';
 import { UserPersonalData } from './userPersonalData.entity';
 import {Address} from "../../commonEntities/address.entity";
+import {UserRole} from "../../../FarmServiceTypes/User/RegisterNewUserDataDtoInterfaceMobi";
 
 /**
  * Main user entity, this table is in charge of connect with rest of user tables
@@ -32,6 +33,13 @@ export class User extends BaseEntity {
     unique: true,
   })
   email: string;
+
+  @Column({
+    type:'enum',
+    enum: UserRole,
+    default: UserRole.worker,
+  })
+  role: UserRole;
 
   @OneToOne(() => Account, (account) => account.user, { onDelete: 'CASCADE' })
   @JoinColumn({

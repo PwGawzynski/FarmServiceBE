@@ -1,13 +1,7 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
-import { HttpAdapterHost } from '@nestjs/core';
-import { ResponseCode, ResponseObject } from '../types/respnse/responseGeneric';
-import { printWarnToConsole } from '../Helpers/printWarnToConsole';
+import {ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus,} from '@nestjs/common';
+import {HttpAdapterHost} from '@nestjs/core';
+import {ResponseCode, ResponseObject} from '../types/respnse/responseGeneric';
+import {printWarnToConsole} from '../Helpers/printWarnToConsole';
 import {ErrorPayloadObject} from "../types/respnse/errorPayloadObject";
 
 /**
@@ -42,8 +36,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     } else
       httpAdapter.reply(
         ctx.getResponse(),
-        {},
+        {
+          code: ResponseCode.ErrorOccurred,
+        } as ResponseObject,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    console.log(exception);
   }
 }

@@ -6,9 +6,13 @@ import {Account} from "./entities/account.entity";
 import {UserPersonalData} from "./entities/userPersonalData.entity";
 import {Address} from "../commonEntities/address.entity";
 import {ResponseCode, ResponseObject} from "../../types/respnse/responseGeneric";
+import {MailingService} from "../mailing/mailing.service";
+import {v4 as uuid} from 'uuid';
 
 @Injectable()
 export class UserService {
+    constructor(private readonly mailer : MailingService) {
+    }
     /**
      * Method which extracts information about userID from req object
      * @param req - req object from express
@@ -66,6 +70,7 @@ export class UserService {
         newUser.email = createUserDto.email;
 
         newAccount.theme = createUserDto.accountData.theme;
+        newAccount.activationCode = uuid();
 
         newUserPersonalData.name = createUserDto.userPersonalData.name;
         newUserPersonalData.surname = createUserDto.userPersonalData.surname;
@@ -84,14 +89,45 @@ export class UserService {
         newUserPersonalData.user = Promise.resolve(newUser);
         newAddress.user = Promise.resolve(newUser);
 
+
+
+        this.mailer.sendMail({
+            to: newUser.email,
+            template:'activateNewAccount',
+            subject:`Welcome on board, let's activate your account`,
+            context:{
+                username: `${newUserPersonalData.name} ${newUserPersonalData.surname}`,
+                activateLink: `http://localhost:3002/user/activate/${newAccount.activationCode}`,
+            }
+        })
+
         await newUser.save();
         newAddress.save();
         newAccount.save();
         newUserPersonalData.save();
 
+
+
         return {
             code: ResponseCode.ProcessedWithoutConfirmationWaiting
         } as ResponseObject;
 
+    }
+
+    async activate(activationCode) {
+        const user = await User.findOne({
+            where:{
+                account:{
+                    activationCode,
+                }
+            }
+        })
+        if(!user) throw new HttpException("Incorrect activation code", HttpStatus.BAD_REQUEST);
+        const userAccount = (await user.account);
+        userAccount.isActivated = true;
+        userAccount.save();
+        return {
+            code: ResponseCode.ProcessedWithoutConfirmationWaiting,
+        } as ResponseObject;
     }
 }

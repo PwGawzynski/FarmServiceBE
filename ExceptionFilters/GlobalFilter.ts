@@ -1,4 +1,3 @@
-
 import {
   ArgumentsHost,
   Catch,
@@ -8,8 +7,14 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { printWarnToConsole } from '../Helpers/printWarnToConsole';
-import {ResponseCode, ResponseObject} from "../FarmServiceTypes/respnse/responseGeneric";
-import {ErrorPayloadObject} from "../FarmServiceTypes/respnse/errorPayloadObject";
+import {
+  ResponseCode,
+  ResponseObject,
+} from '../FarmServiceTypes/respnse/responseGeneric';
+import {
+  ErrorCodes,
+  ErrorPayloadObject,
+} from '../FarmServiceTypes/respnse/errorPayloadObject';
 
 /**
  * Global exception filter, used to filter any exception occurred in app, and send back user-friendly response witch only save for app information
@@ -30,10 +35,12 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       const httpStatus = exception.getStatus();
       const message = exception.message;
+      const response = exception.getResponse() as ErrorPayloadObject;
       const responseBody = {
         code: ResponseCode.ErrorOccurred,
         payload: {
           message,
+          eCode: response?.eCode,
         },
       } as ResponseObject<ErrorPayloadObject>;
 
@@ -43,7 +50,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         ctx.getResponse(),
         {
           code: ResponseCode.ErrorOccurred,
-        } as ResponseObject,
+          payload: {
+            eCode: ErrorCodes.UnknownServerError,
+          },
+        } as ResponseObject<ErrorPayloadObject>,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     console.log(exception);

@@ -1,8 +1,16 @@
-import {Body, Controller, Get, Param, Post, Req, UseGuards} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Request} from "express";
-import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import { Request } from 'express';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -15,13 +23,13 @@ export class UserController {
    */
   @Post()
   @UseGuards(JwtAuthGuard)
-  create(@Body() createUserDto : CreateUserDto, @Req() req : Request){
-    console.log(createUserDto);
+  create(@Body() createUserDto: CreateUserDto, @Req() req: Request) {
+    console.log(createUserDto, 'TEST');
     return this.userService.create(createUserDto, req);
   }
 
   @Get('activate/:activationCode')
-  activate(@Param('activationCode') activationCode){
+  activate(@Param('activationCode') activationCode) {
     console.log(activationCode);
     return this.userService.activate(activationCode);
   }

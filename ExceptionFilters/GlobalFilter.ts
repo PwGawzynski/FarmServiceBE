@@ -34,8 +34,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
      */
     if (exception instanceof HttpException) {
       const httpStatus = exception.getStatus();
-      const message = exception.message;
       const response = exception.getResponse() as ErrorPayloadObject;
+      const message = response.message;
       const responseBody = {
         code: ResponseCode.ErrorOccurred,
         payload: {
@@ -43,7 +43,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
           eCode: response?.eCode,
         },
       } as ResponseObject<ErrorPayloadObject>;
-
+      console.log(responseBody, 'ERROR RESPONSE BODY');
       httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
     } else
       httpAdapter.reply(

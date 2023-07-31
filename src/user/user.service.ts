@@ -100,7 +100,7 @@ export class UserService {
     newUserPersonalData.name = createUserDto.userPersonalData.name;
     newUserPersonalData.surname = createUserDto.userPersonalData.surname;
     newUserPersonalData.phoneNumber =
-      createUserDto.userPersonalData.phoneNumber;
+      createUserDto.userPersonalData.phoneNumber.slice(-9);
 
     newAddress.city = createUserDto.addressData.city;
     newAddress.county = createUserDto.addressData.county;
@@ -114,7 +114,7 @@ export class UserService {
     newUserPersonalData.user = Promise.resolve(newUser);
     newAddress.user = Promise.resolve(newUser);
 
-    this.mailer.sendMail({
+    /*this.mailer.sendMail({
       to: newUser.email,
       template: 'activateNewAccount',
       subject: `Welcome on board, let's activate your account`,
@@ -122,7 +122,7 @@ export class UserService {
         username: `${newUserPersonalData.name} ${newUserPersonalData.surname}`,
         activateLink: `http://localhost:3002/user/activate/${newAccount.activationCode}`,
       },
-    });
+    });*/
 
     await newUser.save();
     newAddress.save();
@@ -153,6 +153,7 @@ export class UserService {
     const userAccount = await user.account;
     userAccount.isActivated = true;
     userAccount.save();
+
     return {
       code: ResponseCode.ProcessedWithoutConfirmationWaiting,
     } as ResponseObject;

@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer';
+import { GetUserAddressDataResponse } from '../../../../FarmServiceTypes/respnse/UserService/GetUserDataResponse';
 
-export class AddressResponseDto {
+export class AddressResponseDto implements GetUserAddressDataResponse {
   @Exclude()
   id: string;
   city: string;

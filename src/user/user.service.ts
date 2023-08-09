@@ -164,7 +164,7 @@ export class UserService {
   }
 
   async getUserAccountData(user: User) {
-    return new UserResponseDto({
+    const userData = new UserResponseDto({
       email: user.email,
       role: user.role,
       personalData: new UserPersonalDataResponseDto({
@@ -178,5 +178,10 @@ export class UserService {
         ...(await user.account),
       }),
     });
+
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: userData,
+    } as ResponseObject;
   }
 }

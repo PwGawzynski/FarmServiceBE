@@ -2,8 +2,9 @@ import { UserRole } from '../../../../FarmServiceTypes/User/RegisterNewUserDataD
 import { UserPersonalDataResponseDto } from './userPersonalData.response.dto';
 import { AddressResponseDto } from '../../../commonEntities/commonEntitiesDTOs/response/address.response.dto';
 import { AccountResponseDto } from './account.response';
+import { GetUserDataResponse } from '../../../../FarmServiceTypes/respnse/UserService/GetUserDataResponse';
 
-export class UserResponseDto {
+export class UserResponseDto implements GetUserDataResponse {
   email: string;
   role: UserRole;
   personalData: UserPersonalDataResponseDto;

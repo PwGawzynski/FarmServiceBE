@@ -29,17 +29,17 @@ export class Account extends BaseEntity {
   theme: Theme;
 
   @Column({
-    type: "uuid",
-    nullable:true,
+    type: 'uuid',
+    nullable: true,
     default: null,
-    length:36,
+    length: 36,
   })
   activationCode: string;
 
   @Column({
-    default:false
+    default: false,
   })
-  isActivated:boolean;
+  isActivated: boolean;
 
   @OneToOne(() => User, (user) => user.account)
   user: Promise<User>;

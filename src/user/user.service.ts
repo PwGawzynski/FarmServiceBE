@@ -15,6 +15,10 @@ import {
   ErrorCodes,
   ErrorPayloadObject,
 } from '../../FarmServiceTypes/respnse/errorPayloadObject';
+import { UserResponseDto } from './dto/response/user.response.dto';
+import { UserPersonalDataResponseDto } from './dto/response/userPersonalData.response.dto';
+import { AddressResponseDto } from '../commonEntities/commonEntitiesDTOs/response/address.response.dto';
+import { AccountResponseDto } from './dto/response/account.response';
 
 interface DataFromReq {
   userLogin: string;
@@ -156,6 +160,28 @@ export class UserService {
 
     return {
       code: ResponseCode.ProcessedWithoutConfirmationWaiting,
+    } as ResponseObject;
+  }
+
+  async getUserAccountData(user: User) {
+    const userData = new UserResponseDto({
+      email: user.email,
+      role: user.role,
+      personalData: new UserPersonalDataResponseDto({
+        // this is because of lazy loading, related tables must be awaited to get its data from db
+        ...(await user.personalData),
+      }),
+      address: new AddressResponseDto({
+        ...(await user.address),
+      }),
+      account: new AccountResponseDto({
+        ...(await user.account),
+      }),
+    });
+
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: userData,
     } as ResponseObject;
   }
 }

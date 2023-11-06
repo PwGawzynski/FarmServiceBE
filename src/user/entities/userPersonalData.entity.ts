@@ -31,7 +31,6 @@ export class UserPersonalData extends BaseEntity {
     nullable: false,
     length: 12,
   })
-
   phoneNumber: string;
 
   @OneToOne(() => User, (user) => user.personalData)

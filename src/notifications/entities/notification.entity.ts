@@ -46,11 +46,15 @@ export class Notification extends BaseEntity {
   })
   descriptions: string;
 
-  @ManyToOne(() => User, (user) => user.causedNotifications)
+  @ManyToOne(() => User, (user) => user.causedNotifications, {
+    nullable: false,
+  })
   @JoinColumn()
   causer: User;
 
-  @ManyToMany(() => User, (recipient) => recipient.addressedNotifications)
+  @ManyToMany(() => User, (recipient) => recipient.addressedNotifications, {
+    nullable: false,
+  })
   @JoinTable({
     name: 'notifications_recipients',
   })

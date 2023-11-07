@@ -4,6 +4,6 @@ import { FieldAddressController } from './field-address.controller';
 
 @Module({
   controllers: [FieldAddressController],
-  providers: [FieldAddressService]
+  providers: [FieldAddressService],
 })
 export class FieldAddressModule {}

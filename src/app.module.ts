@@ -17,6 +17,7 @@ import { FieldModule } from './field/field.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { CompanyModule } from './company/company.module';
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),

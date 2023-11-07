@@ -17,6 +17,7 @@ import { Field } from '../../field/entities/field.entity';
 import { Notification } from '../../notifications/entities/notification.entity';
 import { Company } from '../../company/entities/company.entity';
 
+
 /**
  * Main user entity, this table is in charge of connect with rest of user tables
  * like account and user personal data, here should be stored any indexes columns for performance reason
@@ -71,6 +72,7 @@ export class User extends BaseEntity {
     name: 'user_address_id',
   })
   address: Promise<Address>;
+
 
   @OneToMany(() => Field, (field) => field.owner)
   @JoinColumn({ name: 'owned_fields' })

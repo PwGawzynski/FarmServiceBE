@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Field } from '../../field/entities/field.entity';
 
 @Entity()
 export class FieldAddress extends BaseEntity {
@@ -46,4 +53,7 @@ export class FieldAddress extends BaseEntity {
     nullable: false,
   })
   longitude: string;
+
+  @OneToOne(() => Field, (field) => field.address)
+  field: Promise<Field>;
 }

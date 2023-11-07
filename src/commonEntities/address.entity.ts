@@ -2,6 +2,8 @@ import {
   BaseEntity,
   Column,
   Entity,
+  Index,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -57,6 +59,8 @@ export class Address extends BaseEntity {
   })
   apartmentNumber: string;
 
-  @OneToOne(() => User, (user) => user.address)
+  @OneToOne(() => User, (user) => user.address, { nullable: false })
+  @JoinColumn()
+  @Index({ unique: true })
   user: Promise<User>;
 }

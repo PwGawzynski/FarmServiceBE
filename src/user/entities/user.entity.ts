@@ -8,8 +8,8 @@ import {
 } from 'typeorm';
 import { Account } from './account.entity';
 import { UserPersonalData } from './userPersonalData.entity';
-import {Address} from "../../commonEntities/address.entity";
-import {UserRole} from "../../../FarmServiceTypes/User/RegisterNewUserDataDtoInterfaceMobi";
+import { Address } from '../../commonEntities/address.entity';
+import { UserRole } from '../../../FarmServiceTypes/User/RegisterNewUserDataDtoInterfaceMobi';
 
 /**
  * Main user entity, this table is in charge of connect with rest of user tables
@@ -35,7 +35,7 @@ export class User extends BaseEntity {
   email: string;
 
   @Column({
-    type:'enum',
+    type: 'enum',
     enum: UserRole,
     default: UserRole.worker,
   })
@@ -55,7 +55,6 @@ export class User extends BaseEntity {
   })
   personalData: Promise<UserPersonalData>;
 
-
   @OneToOne(() => Address, (address) => address.user, {
     onDelete: 'CASCADE',
   })
@@ -63,5 +62,4 @@ export class User extends BaseEntity {
     name: 'user_address_id',
   })
   address: Promise<Address>;
-
 }

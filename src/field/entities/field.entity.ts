@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToOne,
@@ -39,8 +40,10 @@ export class Field extends BaseEntity {
 
   @OneToOne(() => FieldAddress, (fieldAddress) => fieldAddress.field, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'address_id' })
+  @Index({ unique: true })
   address: Promise<FieldAddress>;
 
   @ManyToOne(() => User, (user) => user.fields)

@@ -15,6 +15,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { FieldAddressModule } from './field-address/field-address.module';
 import { FieldModule } from './field/field.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     FieldAddressModule,
     FieldModule,
     NotificationsModule,
+    CompanyModule,
   ],
   controllers: [AppController],
   providers: [

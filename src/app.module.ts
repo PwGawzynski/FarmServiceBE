@@ -13,6 +13,8 @@ import { MailingModule } from './mailing/mailing.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { FieldAddressModule } from './field-address/field-address.module';
+import { FieldModule } from './field/field.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -44,6 +46,8 @@ import { FieldAddressModule } from './field-address/field-address.module';
       },
     }),
     FieldAddressModule,
+    FieldModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [

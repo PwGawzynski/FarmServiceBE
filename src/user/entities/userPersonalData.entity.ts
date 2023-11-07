@@ -2,6 +2,8 @@ import {
   BaseEntity,
   Column,
   Entity,
+  Index,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -33,6 +35,8 @@ export class UserPersonalData extends BaseEntity {
   })
   phoneNumber: string;
 
-  @OneToOne(() => User, (user) => user.personalData)
+  @OneToOne(() => User, (user) => user.personalData, { nullable: false })
+  @JoinColumn()
+  @Index({ unique: true })
   user: Promise<User>;
 }

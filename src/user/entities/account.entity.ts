@@ -2,6 +2,8 @@ import {
   BaseEntity,
   Column,
   Entity,
+  Index,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -41,6 +43,10 @@ export class Account extends BaseEntity {
   })
   isActivated: boolean;
 
-  @OneToOne(() => User, (user) => user.account)
+  @OneToOne(() => User, (user) => user.account, { nullable: false })
+  @JoinColumn()
+  @Index({
+    unique: true,
+  })
   user: Promise<User>;
 }

@@ -12,6 +12,11 @@ import { GlobalExceptionFilter } from '../ExceptionFilters/GlobalFilter';
 import { MailingModule } from './mailing/mailing.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { FieldAddressModule } from './field-address/field-address.module';
+import { FieldModule } from './field/field.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { CompanyModule } from './company/company.module';
+
 
 @Module({
   imports: [
@@ -42,6 +47,10 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
         },
       },
     }),
+    FieldAddressModule,
+    FieldModule,
+    NotificationsModule,
+    CompanyModule,
   ],
   controllers: [AppController],
   providers: [

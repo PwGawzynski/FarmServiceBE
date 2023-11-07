@@ -3,6 +3,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -10,6 +12,8 @@ import { Account } from './account.entity';
 import { UserPersonalData } from './userPersonalData.entity';
 import { Address } from '../../commonEntities/address.entity';
 import { UserRole } from '../../../FarmServiceTypes/User/RegisterNewUserDataDtoInterfaceMobi';
+import { Field } from '../../field/entities/field.entity';
+import { Notification } from '../../notifications/entities/notification.entity';
 
 /**
  * Main user entity, this table is in charge of connect with rest of user tables
@@ -62,4 +66,15 @@ export class User extends BaseEntity {
     name: 'user_address_id',
   })
   address: Promise<Address>;
+
+  @OneToMany(() => Field, (field) => field.owner)
+  @JoinColumn({ name: 'owned_fields' })
+  fields: Promise<Field[]>;
+
+  @OneToMany(() => Notification, (notification) => notification.causer)
+  @JoinColumn({ name: 'caused_notifications' })
+  causedNotifications: Promise<Notification[]>;
+
+  @ManyToMany(() => Notification, (notification) => notification.recipients)
+  addressedNotifications: Promise<Notification[]>;
 }

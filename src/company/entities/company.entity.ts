@@ -4,11 +4,13 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Address } from '../../commonEntities/address.entity';
 import { User } from '../../user/entities/user.entity';
+import { Worker } from '../../worker/entities/worker.entity';
 
 @Entity()
 export class Company {
@@ -27,7 +29,10 @@ export class Company {
   address: Promise<Address>;
 
   @OneToOne(() => User, (user) => user.company, { nullable: false })
-  @Index({ unique: true })
+  @Index('UNIQ_USER', { unique: true })
   @JoinColumn()
   owner: Promise<User>;
+
+  @OneToMany(() => Worker, (worker) => worker.company, { nullable: true })
+  workers?: Promise<Worker>;
 }

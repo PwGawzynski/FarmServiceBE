@@ -16,6 +16,7 @@ import { FieldAddressModule } from './field-address/field-address.module';
 import { FieldModule } from './field/field.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { CompanyModule } from './company/company.module';
+import { WorkerModule } from './worker/worker.module';
 
 
 @Module({
@@ -51,6 +52,7 @@ import { CompanyModule } from './company/company.module';
     FieldModule,
     NotificationsModule,
     CompanyModule,
+    WorkerModule,
   ],
   controllers: [AppController],
   providers: [

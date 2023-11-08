@@ -2,6 +2,8 @@ import {
   BaseEntity,
   Column,
   Entity,
+  Index,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -55,5 +57,7 @@ export class FieldAddress extends BaseEntity {
   longitude: string;
 
   @OneToOne(() => Field, (field) => field.address)
+  @JoinColumn()
+  @Index('UNIQ_FIELD', { unique: true })
   field: Promise<Field>;
 }

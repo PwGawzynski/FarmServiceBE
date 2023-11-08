@@ -37,6 +37,6 @@ export class UserPersonalData extends BaseEntity {
 
   @OneToOne(() => User, (user) => user.personalData, { nullable: false })
   @JoinColumn()
-  @Index({ unique: true })
+  @Index('UNIQ_USER', { unique: true })
   user: Promise<User>;
 }

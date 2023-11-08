@@ -45,7 +45,7 @@ export class Account extends BaseEntity {
 
   @OneToOne(() => User, (user) => user.account, { nullable: false })
   @JoinColumn()
-  @Index({
+  @Index('UNIQ_USER', {
     unique: true,
   })
   user: Promise<User>;

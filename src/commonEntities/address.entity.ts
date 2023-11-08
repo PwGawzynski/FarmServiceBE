@@ -59,9 +59,8 @@ export class Address extends BaseEntity {
   })
   apartmentNumber: string;
 
-
   @OneToOne(() => User, (user) => user.address, { nullable: false })
   @JoinColumn()
-  @Index({ unique: true })
+  @Index('UNIQ_USER', { unique: true })
   user: Promise<User>;
 }

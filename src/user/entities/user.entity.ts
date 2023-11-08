@@ -16,7 +16,7 @@ import { UserRole } from '../../../FarmServiceTypes/User/RegisterNewUserDataDtoI
 import { Field } from '../../field/entities/field.entity';
 import { Notification } from '../../notifications/entities/notification.entity';
 import { Company } from '../../company/entities/company.entity';
-
+import { Worker } from '../../worker/entities/worker.entity';
 
 /**
  * Main user entity, this table is in charge of connect with rest of user tables
@@ -52,13 +52,13 @@ export class User extends BaseEntity {
   @JoinColumn({
     name: 'account_id',
   })
-  @Index({ unique: true })
+  @Index('UNIQ_ACCOUNT', { unique: true })
   account: Promise<Account>;
 
   @OneToOne(() => UserPersonalData, (personalData) => personalData.user, {
     onDelete: 'CASCADE',
   })
-  @Index({ unique: true })
+  @Index('UNIQ_PERSONAL_DATA', { unique: true })
   @JoinColumn({
     name: 'user_personal_data_id',
   })
@@ -67,12 +67,11 @@ export class User extends BaseEntity {
   @OneToOne(() => Address, (address) => address.user, {
     onDelete: 'CASCADE',
   })
-  @Index({ unique: true })
+  @Index('UNIQ_ADDRESS', { unique: true })
   @JoinColumn({
     name: 'user_address_id',
   })
   address: Promise<Address>;
-
 
   @OneToMany(() => Field, (field) => field.owner)
   @JoinColumn({ name: 'owned_fields' })
@@ -89,7 +88,15 @@ export class User extends BaseEntity {
     nullable: true,
     onDelete: 'CASCADE',
   })
-  @Index({ unique: true })
+  @Index('UNIQ_COMPANY', { unique: true })
   @JoinColumn()
   company: Promise<Company>;
+
+  @OneToOne(() => Worker, (worker) => worker.user, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
+  @Index('UNIQ_WORKER', { unique: true })
+  @JoinColumn()
+  worker: Promise<Worker>;
 }

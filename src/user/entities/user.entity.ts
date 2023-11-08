@@ -17,6 +17,7 @@ import { Field } from '../../field/entities/field.entity';
 import { Notification } from '../../notifications/entities/notification.entity';
 import { Company } from '../../company/entities/company.entity';
 import { Worker } from '../../worker/entities/worker.entity';
+import { Order } from '../../order/entities/order.entity';
 
 /**
  * Main user entity, this table is in charge of connect with rest of user tables
@@ -99,4 +100,7 @@ export class User extends BaseEntity {
   @Index('UNIQ_WORKER', { unique: true })
   @JoinColumn()
   worker: Promise<Worker>;
+
+  @OneToMany(() => Order, (order) => order.client, { nullable: true })
+  orders: Promise<Order[]>;
 }

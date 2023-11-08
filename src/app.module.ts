@@ -17,7 +17,8 @@ import { FieldModule } from './field/field.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { CompanyModule } from './company/company.module';
 import { WorkerModule } from './worker/worker.module';
-
+import { OrderModule } from './order/order.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -53,6 +54,8 @@ import { WorkerModule } from './worker/worker.module';
     NotificationsModule,
     CompanyModule,
     WorkerModule,
+    OrderModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [

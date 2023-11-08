@@ -5,11 +5,14 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { FieldAddress } from '../../field-address/entities/field-address.entity';
 import { User } from '../../user/entities/user.entity';
+import { Order } from '../../order/entities/order.entity';
+import { Task } from '../../task/entities/task.entity';
 
 @Entity()
 export class Field extends BaseEntity {
@@ -49,4 +52,8 @@ export class Field extends BaseEntity {
   @ManyToOne(() => User, (user) => user.fields)
   @JoinColumn({ name: 'owner_id' })
   owner: Promise<User>;
+
+  @OneToMany(() => Task, (task) => task.field, { nullable: true })
+  @JoinColumn({ name: 'appears_in_orders' })
+  appearsInOrders?: Promise<Order[]>;
 }

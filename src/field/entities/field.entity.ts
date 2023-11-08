@@ -43,7 +43,7 @@ export class Field extends BaseEntity {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'address_id' })
-  @Index({ unique: true })
+  @Index('UNIQ_ADDRESS', { unique: true })
   address: Promise<FieldAddress>;
 
   @ManyToOne(() => User, (user) => user.fields)

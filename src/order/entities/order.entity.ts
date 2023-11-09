@@ -63,10 +63,10 @@ export class Order {
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
-    nullable: false,
+    nullable: true,
     name: 'created_at',
   })
-  createdAt: Date;
+  createdAt?: Date;
 
   @Column({
     type: 'timestamp',
@@ -82,7 +82,7 @@ export class Order {
     nullable: true,
     name: 'additional_info',
   })
-  additional_info: string;
+  additional_info?: string;
 
   // TODO virtual column for totalDoneArea based on isDone in connection table ManyToMany order-field(Task)
   @VirtualColumn({

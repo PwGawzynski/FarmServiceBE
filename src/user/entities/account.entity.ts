@@ -28,7 +28,7 @@ export class Account extends BaseEntity {
     type: 'enum',
     default: Theme.dark,
   })
-  theme: Theme;
+  theme?: Theme;
 
   @Column({
     type: 'uuid',
@@ -41,7 +41,7 @@ export class Account extends BaseEntity {
   @Column({
     default: false,
   })
-  isActivated: boolean;
+  isActivated?: boolean;
 
   @OneToOne(() => User, (user) => user.account, { nullable: false })
   @JoinColumn()

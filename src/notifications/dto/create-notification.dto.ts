@@ -2,7 +2,6 @@ import { OmitBaseEntityAndId } from '../../../SelfTypes/OmitBaseEntity';
 import { Notification } from '../entities/notification.entity';
 import {
   IsArray,
-  IsDateString,
   IsEnum,
   IsNotEmpty,
   IsString,

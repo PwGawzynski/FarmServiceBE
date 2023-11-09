@@ -1,17 +1,24 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import {AuthModule} from "./auth/auth.module";
-import {ConfigModule} from "@nestjs/config";
-import configuration from "../config/configuration";
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import configuration from '../config/configuration';
 import { UserModule } from './user/user.module';
 import * as process from 'process';
-import {TypeOrmModule} from "@nestjs/typeorm";
-import {APP_FILTER} from "@nestjs/core";
-import {GlobalExceptionFilter} from "../ExceptionFilters/GlobalFilter";
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { APP_FILTER } from '@nestjs/core';
+import { GlobalExceptionFilter } from '../ExceptionFilters/GlobalFilter';
 import { MailingModule } from './mailing/mailing.module';
-import {MailerModule} from "@nestjs-modules/mailer";
-import {HandlebarsAdapter} from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { FieldAddressModule } from './field-address/field-address.module';
+import { FieldModule } from './field/field.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { CompanyModule } from './company/company.module';
+import { WorkerModule } from './worker/worker.module';
+import { OrderModule } from './order/order.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -29,10 +36,10 @@ import {HandlebarsAdapter} from "@nestjs-modules/mailer/dist/adapters/handlebars
       logging: true,
       autoLoadEntities: true,
     }),
-      AuthModule,
-      UserModule,
-      MailingModule,
-      MailerModule.forRoot({
+    AuthModule,
+    UserModule,
+    MailingModule,
+    MailerModule.forRoot({
       transport: 'smtps://user@domain.com:pass@smtp.domain.com',
       template: {
         dir: process.cwd() + '/mailTemplates/',
@@ -42,11 +49,21 @@ import {HandlebarsAdapter} from "@nestjs-modules/mailer/dist/adapters/handlebars
         },
       },
     }),
+    FieldAddressModule,
+    FieldModule,
+    NotificationsModule,
+    CompanyModule,
+    WorkerModule,
+    OrderModule,
+    TaskModule,
   ],
   controllers: [AppController],
-  providers: [AppService, {
-    provide: APP_FILTER,
-    useClass: GlobalExceptionFilter,
-  },],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: GlobalExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}

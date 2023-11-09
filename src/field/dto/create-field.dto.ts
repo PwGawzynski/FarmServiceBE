@@ -29,7 +29,9 @@ export class CreateFieldDto
   /**
    * checks if matches format 02034_2.0008.241
    */
-  @Matches(/^\d{5}_\d+\.\d{4}\.\d{3}$/)
+  @Matches(/^\d{5}_\d+\.\d{4}\.\d{3}$/, {
+    message: 'Polish system id must fulfill pattern 02034_2.0008.241',
+  })
   @IsNotEmpty({ message: 'Polish system id must be not empty strings' })
   polishSystemId: string;
 

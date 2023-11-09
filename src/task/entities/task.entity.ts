@@ -21,6 +21,23 @@ export class Task {
   })
   isDone: boolean;
 
+  // TODO add connection table task-[start-pause-logs] to store logs when task is opened passed opened and closed
+
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    nullable: false,
+    name: 'opened_at',
+  })
+  openedAt: Date;
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    name: 'closed_at',
+  })
+  closedAt: Date;
+
   @ManyToOne(() => Order, (order) => order.fields)
   @JoinColumn({ name: 'order_id' })
   order: Promise<Order>;

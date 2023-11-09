@@ -47,7 +47,7 @@ export class User extends BaseEntity {
     enum: UserRole,
     default: UserRole.worker,
   })
-  role: UserRole;
+  role?: UserRole;
 
   @OneToOne(() => Account, (account) => account.user, { onDelete: 'CASCADE' })
   @JoinColumn({

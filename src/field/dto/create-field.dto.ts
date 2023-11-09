@@ -19,6 +19,7 @@ import { CreateAddressDto } from '../../commonEntities/commonEntitiesDTOs/create
 import { Type } from 'class-transformer';
 import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReject.decorator';
 import { User } from '../../user/entities/user.entity';
+import { getDateFormatDescriptionFor } from '../../../Helpers/common descriptionGetters';
 
 export class CreateFieldDto
   implements
@@ -44,8 +45,7 @@ export class CreateFieldDto
   area: number;
 
   @IsDateString(undefined, {
-    message:
-      'date of collection data must meet the requirements of ISO8601 date pattern',
+    message: getDateFormatDescriptionFor('dateOfCollectionData'),
   })
   @IsNotEmpty({ message: 'date of collection data cannot be empty' })
   dateOfCollectionData: Date;

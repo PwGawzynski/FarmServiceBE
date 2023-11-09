@@ -1,7 +1,6 @@
 import {
   Column,
   Entity,
-  Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
@@ -23,15 +22,6 @@ export class Order {
 
   @Column({
     type: 'varchar',
-    length: 40,
-    nullable: false,
-    name: 'polish_system_id',
-  })
-  @Index('UNIQ_POLISH_SYSTEM_ID', { unique: true })
-  polishSystemId: string;
-
-  @Column({
-    type: 'varchar',
     length: 50,
     nullable: false,
   })
@@ -43,7 +33,7 @@ export class Order {
     default: OrderStatus.Pending,
     nullable: false,
   })
-  status: OrderStatus;
+  status?: OrderStatus;
 
   @Column({
     type: 'enum',
@@ -63,7 +53,6 @@ export class Order {
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
-    nullable: true,
     name: 'created_at',
   })
   createdAt?: Date;
@@ -82,7 +71,7 @@ export class Order {
     nullable: true,
     name: 'additional_info',
   })
-  additional_info?: string;
+  additionalInfo?: string;
 
   // TODO virtual column for totalDoneArea based on isDone in connection table ManyToMany order-field(Task)
   @VirtualColumn({

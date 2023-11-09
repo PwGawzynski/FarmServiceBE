@@ -29,9 +29,11 @@ export class Field extends BaseEntity {
   polishSystemId: string;
 
   @Column({
-    type: 'smallint',
-    nullable: false,
+    type: 'numeric',
+    precision: 10,
+    scale: 5,
     unsigned: true,
+    nullable: false,
   })
   area: number;
 

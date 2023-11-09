@@ -36,7 +36,7 @@ export class Account extends BaseEntity {
     default: null,
     length: 36,
   })
-  activationCode: string;
+  activationCode?: string;
 
   @Column({
     default: false,

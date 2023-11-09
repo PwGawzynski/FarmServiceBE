@@ -26,17 +26,17 @@ export class Task {
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
-    nullable: false,
+    nullable: true,
     name: 'opened_at',
   })
-  openedAt: Date;
+  openedAt?: Date;
 
   @Column({
     type: 'timestamp',
     nullable: true,
     name: 'closed_at',
   })
-  closedAt: Date;
+  closedAt?: Date;
 
   @ManyToOne(() => Order, (order) => order.fields)
   @JoinColumn({ name: 'order_id' })

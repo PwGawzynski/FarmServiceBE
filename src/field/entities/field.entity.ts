@@ -25,6 +25,7 @@ export class Field extends BaseEntity {
     nullable: false,
     name: 'polish_system_id',
   })
+  @Index('UNIQ_POLISH_SYSTEM_ID', { unique: true })
   polishSystemId: string;
 
   @Column({

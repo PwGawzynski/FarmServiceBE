@@ -13,13 +13,14 @@ import { CreateAddressDto } from '../../commonEntities/commonEntitiesDTOs/create
 import { Type } from 'class-transformer';
 import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReject.decorator';
 import { User } from '../../user/entities/user.entity';
+import CompanyConstants from '../../../FarmServiceTypes/Company/Constants';
 
 export class CreateCompanyDto
   implements OmitBaseEntityAndId<Company, 'address' | 'owner'>
 {
   @IsString({ message: 'Company must be a string' })
   @IsNotEmpty({ message: 'Company name cannot be empty string' })
-  @Length(1, 100, {
+  @Length(CompanyConstants.NAME_MIN_LEN, CompanyConstants.NAME_MAX_LEN, {
     message:
       'Company name cannot be longer than 100 characters and shorter than one',
   })

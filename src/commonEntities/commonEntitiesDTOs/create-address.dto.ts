@@ -6,6 +6,7 @@ import {
   Matches,
 } from 'class-validator';
 import { AddressDataTransferObjectI } from '../../../FarmServiceTypes/User/RegisterNewUserDataDtoInterfaceMobi';
+import AddressConstants from '../../../FarmServiceTypes/Address/Constants';
 
 /**
  * This DTO represent all address entities in application
@@ -17,7 +18,7 @@ export class CreateAddressDto implements AddressDataTransferObjectI {
   @IsNotEmpty({
     message: 'City cannot be empty string',
   })
-  @Length(0, 70)
+  @Length(AddressConstants.CITY_MIN_LEN, AddressConstants.CITY_MIN_LEN)
   city: string;
 
   @IsString({
@@ -26,7 +27,7 @@ export class CreateAddressDto implements AddressDataTransferObjectI {
   @IsNotEmpty({
     message: 'County cannot be empty string',
   })
-  @Length(0, 50)
+  @Length(AddressConstants.COUNTY_MIN_LEN, AddressConstants.COUNTY_MAX_LEN)
   county: string;
 
   @IsString({
@@ -35,7 +36,10 @@ export class CreateAddressDto implements AddressDataTransferObjectI {
   @IsNotEmpty({
     message: 'Voivodeship cannot be empty string',
   })
-  @Length(0, 50)
+  @Length(
+    AddressConstants.VOIVODESHIP_MIN_LEN,
+    AddressConstants.VOIVODESHIP_MAX_LEN,
+  )
   @IsOptional()
   voivodeship?: string;
 
@@ -45,7 +49,7 @@ export class CreateAddressDto implements AddressDataTransferObjectI {
   @IsNotEmpty({
     message: 'Street cannot be empty string',
   })
-  @Length(0, 100)
+  @Length(AddressConstants.STREET_MIN_LEN, AddressConstants.STREET_MAX_LEN)
   @IsOptional()
   street?: string;
 
@@ -55,7 +59,7 @@ export class CreateAddressDto implements AddressDataTransferObjectI {
   @IsNotEmpty({
     message: 'House number cannot be empty string',
   })
-  @Length(0, 20)
+  @Length(AddressConstants.HOUSE_NR_MIN_LEN, AddressConstants.HOUSE_NR_MAX_LEN)
   houseNumber: string;
 
   @IsString({
@@ -64,7 +68,10 @@ export class CreateAddressDto implements AddressDataTransferObjectI {
   @IsNotEmpty({
     message: 'Apartment number cannot be empty string',
   })
-  @Length(0, 20)
+  @Length(
+    AddressConstants.APARTMENT_NR_MIN_LEN,
+    AddressConstants.APARTMENT_NR_MAX_LEN,
+  )
   @IsOptional()
   apartmentNumber?: string;
 
@@ -75,6 +82,6 @@ export class CreateAddressDto implements AddressDataTransferObjectI {
     message: 'Postal code cannot be empty string',
   })
   @Matches('^[0-9]{2}-[0-9]{3}$')
-  @Length(0, 6)
+  @Length(AddressConstants.POSTAL_CODE_LEN, AddressConstants.POSTAL_CODE_LEN)
   postalCode: string;
 }

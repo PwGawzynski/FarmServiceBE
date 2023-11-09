@@ -24,7 +24,7 @@ export class CreateOrderDto
   implements OmitBaseEntityAndId<Order, 'client' | 'totalArea'>
 {
   @IsString({ message: 'Order name must be an string' })
-  @Length(OrderConstants.ORDER_NAME_MIN_LEN, OrderConstants.ORDER_NAME_MAX_LEN)
+  @Length(OrderConstants.NAME_MIN_LEN, OrderConstants.NAME_MAX_LEN)
   name: string;
 
   @IsEnum(OrderStatus)
@@ -41,14 +41,14 @@ export class CreateOrderDto
   @IsOptional()
   @IsString({ message: 'Additional info must be an string' })
   @Length(
-    OrderConstants.ORDER_ADDITIONAL_INFO_MIN_LEN,
-    OrderConstants.ORDER_ADDITIONAL_INFO_MAX_LEN,
+    OrderConstants.ADDITIONAL_INFO_MIN_LEN,
+    OrderConstants.ADDITIONAL_INFO_MAX_LEN,
   )
   additionalInfo: string;
 
   @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(OrderConstants.ORDER_MIN_PRICE_PER_UNIT)
-  @Max(OrderConstants.ORDER_MAX_PRICE_PER_UNIT)
+  @Min(OrderConstants.MIN_PRICE_PER_UNIT)
+  @Max(OrderConstants.MAX_PRICE_PER_UNIT)
   pricePerUnit: number;
 
   @IsUUID()

@@ -27,9 +27,10 @@ export class Notification extends BaseEntity {
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
+    nullable: true,
     name: 'created_at',
   })
-  createdAt: Date;
+  createdAt?: Date;
 
   @Column({
     type: 'enum',
@@ -44,7 +45,7 @@ export class Notification extends BaseEntity {
     length: 10000,
     nullable: true,
   })
-  descriptions: string;
+  description?: string;
 
   @ManyToOne(() => User, (user) => user.causedNotifications, {
     nullable: false,

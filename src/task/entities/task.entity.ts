@@ -13,6 +13,14 @@ export class Task {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({
+    type: 'bool',
+    default: false,
+    name: 'is_done',
+    nullable: false,
+  })
+  isDone: boolean;
+
   @ManyToOne(() => Order, (order) => order.fields)
   @JoinColumn({ name: 'order_id' })
   order: Promise<Order>;
@@ -20,11 +28,4 @@ export class Task {
   @ManyToOne(() => Field, (field) => field.appearsInOrders)
   @JoinColumn({ name: 'Field_id' })
   field: Promise<Field>;
-
-  @Column({
-    type: 'bool',
-    default: false,
-    name: 'is_done',
-  })
-  isDone: boolean;
 }

@@ -10,6 +10,7 @@ import {
   IsString,
   IsUUID,
   Length,
+  Matches,
   Max,
   Min,
   ValidateNested,
@@ -23,9 +24,12 @@ export class CreateFieldDto
   implements
     OmitBaseEntityAndId<Field, 'address' | 'appearsInOrders' | 'owner'>
 {
-  //TODO add regex 02034_2.0008.241
   @IsString({ message: 'Polish system id must be a string' })
   @Length(1, 40)
+  /**
+   * checks if matches format 02034_2.0008.241
+   */
+  @Matches(/^\d{5}_\d+\.\d{4}\.\d{3}$/)
   @IsNotEmpty({ message: 'Polish system id must be not empty strings' })
   polishSystemId: string;
 

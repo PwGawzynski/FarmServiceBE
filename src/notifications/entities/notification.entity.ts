@@ -27,7 +27,6 @@ export class Notification extends BaseEntity {
   @Column({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
-    nullable: true,
     name: 'created_at',
   })
   createdAt?: Date;

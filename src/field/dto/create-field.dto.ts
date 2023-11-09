@@ -20,13 +20,14 @@ import { Type } from 'class-transformer';
 import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReject.decorator';
 import { User } from '../../user/entities/user.entity';
 import { getDateFormatDescriptionFor } from '../../../Helpers/common descriptionGetters';
+import FieldConstants from '../../../FarmServiceTypes/Field/Constants';
 
 export class CreateFieldDto
   implements
     OmitBaseEntityAndId<Field, 'address' | 'appearsInOrders' | 'owner'>
 {
   @IsString({ message: 'Polish system id must be a string' })
-  @Length(1, 40)
+  @Length(FieldConstants.POLISH_ID_MIN_LEN, FieldConstants.POLISH_ID_MAX_LEN)
   /**
    * checks if matches format 02034_2.0008.241
    */
@@ -37,11 +38,11 @@ export class CreateFieldDto
   polishSystemId: string;
 
   @IsNumber({
-    maxDecimalPlaces: 2,
+    maxDecimalPlaces: FieldConstants.AREA_MAX_DECIMAL_PLACES,
   })
   @IsPositive({ message: 'Area cannot be negative number' })
-  @Max(65535)
-  @Min(0)
+  @Max(FieldConstants.AREA_MAX_VALUE)
+  @Min(FieldConstants.AREA_MIN_VALUE)
   area: number;
 
   @IsDateString(undefined, {

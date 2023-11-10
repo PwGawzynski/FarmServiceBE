@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Field } from '../../field/entities/field.entity';
+import FieldAddressConstants from '../../../FarmServiceTypes/FiledAddress/Constants';
 
 @Entity()
 export class FieldAddress extends BaseEntity {
@@ -16,42 +17,42 @@ export class FieldAddress extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    length: 70,
+    length: FieldAddressConstants.CITY_MAX_LEN,
     nullable: false,
   })
   city: string;
 
   @Column({
     type: 'varchar',
-    length: 50,
+    length: FieldAddressConstants.VOIVODESHIP_MAX_LEN,
     nullable: false,
   })
   voivodeship: string;
 
   @Column({
     type: 'varchar',
-    length: 70,
+    length: FieldAddressConstants.COUNTY_MAX_LEN,
     nullable: false,
   })
   county: string;
 
   @Column({
     type: 'varchar',
-    length: 6,
+    length: FieldAddressConstants.POSTAL_CODE_LEN,
     nullable: false,
   })
   postalCode: string;
 
   @Column({
     type: 'varchar',
-    length: 15,
+    length: FieldAddressConstants.LATITUDE_MAX_LEN,
     nullable: false,
   })
   latitude: string;
 
   @Column({
     type: 'varchar',
-    length: 15,
+    length: FieldAddressConstants.LONGITUDE_MAX_LEN,
     nullable: false,
   })
   longitude: string;

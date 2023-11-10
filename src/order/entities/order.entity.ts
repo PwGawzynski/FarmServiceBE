@@ -14,6 +14,7 @@ import {
 import { User } from '../../user/entities/user.entity';
 import { Field } from '../../field/entities/field.entity';
 import { Task } from '../../task/entities/task.entity';
+import OrderConstants from '../../../FarmServiceTypes/Order/Constants';
 
 @Entity()
 export class Order {
@@ -22,7 +23,7 @@ export class Order {
 
   @Column({
     type: 'varchar',
-    length: 50,
+    length: OrderConstants.NAME_MAX_LEN,
     nullable: false,
   })
   name: string;
@@ -67,7 +68,7 @@ export class Order {
 
   @Column({
     type: 'varchar',
-    length: 10000,
+    length: OrderConstants.ADDITIONAL_INFO_MAX_LEN,
     nullable: true,
     name: 'additional_info',
   })
@@ -84,7 +85,7 @@ export class Order {
   @Column({
     type: 'numeric',
     precision: 9,
-    scale: 2,
+    scale: OrderConstants.MIN_PRICE_PER_UNIT_SCALE,
     name: 'price_per_unit',
     nullable: true,
   })

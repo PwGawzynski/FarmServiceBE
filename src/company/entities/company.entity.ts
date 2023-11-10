@@ -11,6 +11,7 @@ import {
 import { Address } from '../../commonEntities/address.entity';
 import { User } from '../../user/entities/user.entity';
 import { Worker } from '../../worker/entities/worker.entity';
+import CompanyConstants from '../../../FarmServiceTypes/Company/Constants';
 
 @Entity()
 export class Company {
@@ -19,7 +20,7 @@ export class Company {
 
   @Column({
     type: 'varchar',
-    length: 100,
+    length: CompanyConstants.NAME_MAX_LEN,
     nullable: false,
   })
   name: string;

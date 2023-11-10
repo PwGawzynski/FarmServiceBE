@@ -47,7 +47,7 @@ export class User extends BaseEntity {
     enum: UserRole,
     default: UserRole.worker,
   })
-  role: UserRole;
+  role?: UserRole;
 
   @OneToOne(() => Account, (account) => account.user, { onDelete: 'CASCADE' })
   @JoinColumn({
@@ -91,7 +91,7 @@ export class User extends BaseEntity {
   })
   @Index('UNIQ_COMPANY', { unique: true })
   @JoinColumn()
-  company: Promise<Company>;
+  company?: Promise<Company>;
 
   @OneToOne(() => Worker, (worker) => worker.user, {
     nullable: true,
@@ -99,8 +99,8 @@ export class User extends BaseEntity {
   })
   @Index('UNIQ_WORKER', { unique: true })
   @JoinColumn()
-  worker: Promise<Worker>;
+  worker?: Promise<Worker>;
 
   @OneToMany(() => Order, (order) => order.client, { nullable: true })
-  orders: Promise<Order[]>;
+  orders?: Promise<Order[]>;
 }

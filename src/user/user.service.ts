@@ -98,14 +98,17 @@ export class UserService {
     newUser.email = createUserDto.email;
     newUser.role = createUserDto.userRole;
 
+    newAccount.id = uuid();
     newAccount.theme = createUserDto.accountData.theme;
     newAccount.activationCode = uuid();
 
+    newUserPersonalData.id = uuid();
     newUserPersonalData.name = createUserDto.userPersonalData.name;
     newUserPersonalData.surname = createUserDto.userPersonalData.surname;
     newUserPersonalData.phoneNumber =
       createUserDto.userPersonalData.phoneNumber.slice(-9);
 
+    newAddress.id = uuid();
     newAddress.city = createUserDto.addressData.city;
     newAddress.county = createUserDto.addressData.county;
     newAddress.voivodeship = createUserDto.addressData.voivodeship;
@@ -117,6 +120,13 @@ export class UserService {
     newAccount.user = Promise.resolve(newUser);
     newUserPersonalData.user = Promise.resolve(newUser);
     newAddress.user = Promise.resolve(newUser);
+
+    // TODO fix
+    /*(await newUser.account).id = newAccount.id;
+    (await newUser.personalData).id = newUserPersonalData.id;
+    (await newUser.address).id = newAddress.id;*/
+
+    console.log(newUser, 'TESTTTT');
 
     /*this.mailer.sendMail({
       to: newUser.email,

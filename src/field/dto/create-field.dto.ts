@@ -10,6 +10,7 @@ import {
   IsString,
   IsUUID,
   Length,
+  Matches,
   Max,
   Min,
   ValidateNested,
@@ -18,28 +19,34 @@ import { CreateAddressDto } from '../../commonEntities/commonEntitiesDTOs/create
 import { Type } from 'class-transformer';
 import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReject.decorator';
 import { User } from '../../user/entities/user.entity';
+import { getDateFormatDescriptionFor } from '../../../Helpers/common descriptionGetters';
+import FieldConstants from '../../../FarmServiceTypes/Field/Constants';
 
 export class CreateFieldDto
   implements
     OmitBaseEntityAndId<Field, 'address' | 'appearsInOrders' | 'owner'>
 {
-  //TODO add regex 02034_2.0008.241
   @IsString({ message: 'Polish system id must be a string' })
-  @Length(1, 40)
+  @Length(FieldConstants.POLISH_ID_MIN_LEN, FieldConstants.POLISH_ID_MAX_LEN)
+  /**
+   * checks if matches format 02034_2.0008.241
+   */
+  @Matches(/^\d{5}_\d+\.\d{4}\.\d{3}$/, {
+    message: 'Polish system id must fulfill pattern 02034_2.0008.241',
+  })
   @IsNotEmpty({ message: 'Polish system id must be not empty strings' })
   polishSystemId: string;
 
   @IsNumber({
-    maxDecimalPlaces: 2,
+    maxDecimalPlaces: FieldConstants.AREA_MAX_DECIMAL_PLACES,
   })
   @IsPositive({ message: 'Area cannot be negative number' })
-  @Max(65535)
-  @Min(0)
+  @Max(FieldConstants.AREA_MAX_VALUE)
+  @Min(FieldConstants.AREA_MIN_VALUE)
   area: number;
 
   @IsDateString(undefined, {
-    message:
-      'date of collection data must meet the requirements of ISO8601 date pattern',
+    message: getDateFormatDescriptionFor('dateOfCollectionData'),
   })
   @IsNotEmpty({ message: 'date of collection data cannot be empty' })
   dateOfCollectionData: Date;

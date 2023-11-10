@@ -33,7 +33,7 @@ export class Address extends BaseEntity {
     length: 50,
     nullable: true,
   })
-  voivodeship: string;
+  voivodeship?: string;
 
   @Column({
     length: 6,
@@ -45,7 +45,7 @@ export class Address extends BaseEntity {
     length: 100,
     nullable: true,
   })
-  street: string;
+  street?: string;
 
   @Column({
     length: 20,
@@ -57,7 +57,7 @@ export class Address extends BaseEntity {
     length: 20,
     nullable: true,
   })
-  apartmentNumber: string;
+  apartmentNumber?: string;
 
   @OneToOne(() => User, (user) => user.address, { nullable: false })
   @JoinColumn()

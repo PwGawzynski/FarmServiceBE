@@ -13,6 +13,7 @@ import { FieldAddress } from '../../field-address/entities/field-address.entity'
 import { User } from '../../user/entities/user.entity';
 import { Order } from '../../order/entities/order.entity';
 import { Task } from '../../task/entities/task.entity';
+import FieldConstants from '../../../FarmServiceTypes/Field/Constants';
 
 @Entity()
 export class Field extends BaseEntity {
@@ -21,16 +22,19 @@ export class Field extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    length: 40,
+    length: FieldConstants.POLISH_ID_MAX_LEN,
     nullable: false,
     name: 'polish_system_id',
   })
+  @Index('UNIQ_POLISH_SYSTEM_ID', { unique: true })
   polishSystemId: string;
 
   @Column({
-    type: 'smallint',
-    nullable: false,
+    type: 'numeric',
+    precision: 10,
+    scale: FieldConstants.AREA_MAX_DECIMAL_PLACES,
     unsigned: true,
+    nullable: false,
   })
   area: number;
 

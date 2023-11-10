@@ -18,7 +18,7 @@ export class CreateAddressDto implements AddressDataTransferObjectI {
   @IsNotEmpty({
     message: 'City cannot be empty string',
   })
-  @Length(AddressConstants.CITY_MIN_LEN, AddressConstants.CITY_MIN_LEN)
+  @Length(AddressConstants.CITY_MIN_LEN, AddressConstants.CITY_MAX_LEN)
   city: string;
 
   @IsString({

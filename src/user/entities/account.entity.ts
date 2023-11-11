@@ -8,11 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-
-export enum Theme {
-  dark,
-  light,
-}
+import { Theme } from '../../../FarmServiceTypes/Account/Constants';
 
 /**
  * This table contains information about user

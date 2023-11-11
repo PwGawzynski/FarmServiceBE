@@ -10,7 +10,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { CreateUserPersonalDataDto } from './create-userPersonalData.dto';
-import { CreateAddressDto } from '../../commonEntities/commonEntitiesDTOs/create-address.dto';
+import { CreateAddressDto } from '../../commonEntities/dto/create-address.dto';
 import { CreateAccountDto } from './create-account.dto';
 import { Type } from 'class-transformer';
 import {

@@ -15,7 +15,7 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import { CreateAddressDto } from '../../commonEntities/commonEntitiesDTOs/create-address.dto';
+import { CreateAddressDto } from '../../commonEntities/dto/create-address.dto';
 import { Type } from 'class-transformer';
 import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReject.decorator';
 import { User } from '../../user/entities/user.entity';

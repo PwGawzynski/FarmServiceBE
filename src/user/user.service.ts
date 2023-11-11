@@ -17,7 +17,7 @@ import {
 } from '../../FarmServiceTypes/respnse/errorPayloadObject';
 import { UserResponseDto } from './dto/response/user.response.dto';
 import { UserPersonalDataResponseDto } from './dto/response/userPersonalData.response.dto';
-import { AddressResponseDto } from '../commonEntities/commonEntitiesDTOs/response/address.response.dto';
+import { AddressResponseDto } from '../commonEntities/dto/response/address.response.dto';
 import { AccountResponseDto } from './dto/response/account.response';
 
 interface DataFromReq {

@@ -10,8 +10,8 @@ import {
 } from 'class-validator';
 import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReject.decorator';
 import { User } from '../../user/entities/user.entity';
-import { EventType } from '../../../FarmServiceTypes/notification/notification';
-import NotificationConstants from '../../../FarmServiceTypes/notification/Constants';
+import { EventType } from '../../../FarmServiceTypes/Notification/Enums';
+import NotificationConstants from '../../../FarmServiceTypes/Notification/Constants';
 
 export class CreateNotificationDto
   implements OmitBaseEntityAndId<Notification, 'causer' | 'recipients'>

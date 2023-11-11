@@ -12,12 +12,12 @@ import {
 import { Account } from './account.entity';
 import { UserPersonalData } from './userPersonalData.entity';
 import { Address } from '../../commonEntities/address.entity';
-import { UserRole } from '../../../FarmServiceTypes/User/RegisterNewUserDataDtoInterfaceMobi';
 import { Field } from '../../field/entities/field.entity';
 import { Notification } from '../../notifications/entities/notification.entity';
 import { Company } from '../../company/entities/company.entity';
 import { Worker } from '../../worker/entities/worker.entity';
 import { Order } from '../../order/entities/order.entity';
+import { UserRole } from '../../../FarmServiceTypes/User/Enums';
 
 /**
  * Main user entity, this table is in charge of connect with rest of user tables

@@ -13,15 +13,13 @@ import { CreateUserPersonalDataDto } from './create-userPersonalData.dto';
 import { CreateAddressDto } from '../../commonEntities/dto/create-address.dto';
 import { CreateAccountDto } from './create-account.dto';
 import { Type } from 'class-transformer';
-import {
-  RegisterNewUserDataDtoInterfaceMobi,
-  UserRole,
-} from '../../../FarmServiceTypes/User/RegisterNewUserDataDtoInterfaceMobi';
+import { UserRole } from '../../../FarmServiceTypes/User/Enums';
+import { CreateUserReqI } from '../../../FarmServiceTypes/User/Requests';
 
 /**
  * This DTO contains information about User entity properties types
  */
-export class CreateUserDto implements RegisterNewUserDataDtoInterfaceMobi {
+export class CreateUserDto implements CreateUserReqI {
   @IsString({
     message: 'User login/email/nip must be string type',
   })

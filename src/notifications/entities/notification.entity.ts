@@ -8,9 +8,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { EventType } from '../../../FarmServiceTypes/notification/notification';
+import { EventType } from '../../../FarmServiceTypes/Notification/Enums';
 import { User } from '../../user/entities/user.entity';
-import NotificationConstants from '../../../FarmServiceTypes/notification/Constants';
+import NotificationConstants from '../../../FarmServiceTypes/Notification/Constants';
 
 @Entity()
 export class Notification extends BaseEntity {

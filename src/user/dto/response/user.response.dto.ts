@@ -1,6 +1,6 @@
 import { UserRole } from '../../../../FarmServiceTypes/User/RegisterNewUserDataDtoInterfaceMobi';
 import { UserPersonalDataResponseDto } from './userPersonalData.response.dto';
-import { AddressResponseDto } from '../../../commonEntities/commonEntitiesDTOs/response/address.response.dto';
+import { AddressResponseDto } from '../../../commonEntities/dto/response/address.response.dto';
 import { AccountResponseDto } from './account.response';
 import { GetUserDataResponse } from '../../../../FarmServiceTypes/respnse/UserService/GetUserDataResponse';
 

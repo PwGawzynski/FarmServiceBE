@@ -1,7 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import { Theme } from '../../../../FarmServiceTypes/Account/Constants';
 
-class AccountWhiteList {
+export class AccountWhiteList {
   constructor(partial: Partial<AccountResponseDto>) {
     Object.assign(this, partial);
   }
@@ -20,9 +20,3 @@ export class AccountResponseDto extends AccountWhiteList {
     Object.assign(this, partial);
   }
 }
-
-type ClassFields<T> = {
-  [K in keyof T]: T[K];
-};
-
-export type AccountResponseWhiteList = ClassFields<AccountWhiteList>;

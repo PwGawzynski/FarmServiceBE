@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { EventType } from '../../../FarmServiceTypes/notification/notification';
 import { User } from '../../user/entities/user.entity';
+import NotificationConstants from '../../../FarmServiceTypes/notification/Constants';
 
 @Entity()
 export class Notification extends BaseEntity {
@@ -18,7 +19,7 @@ export class Notification extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    length: 100,
+    length: NotificationConstants.SCHORT_INFO_MAX_LEN,
     nullable: false,
     name: 'schort_info',
   })
@@ -29,7 +30,7 @@ export class Notification extends BaseEntity {
     default: () => 'CURRENT_TIMESTAMP',
     name: 'created_at',
   })
-  createdAt: Date;
+  createdAt?: Date;
 
   @Column({
     type: 'enum',
@@ -41,10 +42,10 @@ export class Notification extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    length: 10000,
+    length: NotificationConstants.DESCRIPTION_MAX_LEN,
     nullable: true,
   })
-  descriptions: string;
+  description?: string;
 
   @ManyToOne(() => User, (user) => user.causedNotifications, {
     nullable: false,

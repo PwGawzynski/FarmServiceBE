@@ -121,12 +121,9 @@ export class UserService {
     newUserPersonalData.user = Promise.resolve(newUser);
     newAddress.user = Promise.resolve(newUser);
 
-    // TODO fix
-    /*(await newUser.account).id = newAccount.id;
-    (await newUser.personalData).id = newUserPersonalData.id;
-    (await newUser.address).id = newAddress.id;*/
-
-    console.log(newUser, 'TESTTTT');
+    /*newUser.address = Promise.resolve(newAddress);
+    newUser.account = Promise.resolve(newAccount);
+    newUser.personalData = Promise.resolve(newUserPersonalData);*/
 
     /*this.mailer.sendMail({
       to: newUser.email,
@@ -137,11 +134,15 @@ export class UserService {
         activateLink: `http://localhost:3002/user/activate/${newAccount.activationCode}`,
       },
     });*/
-
     await newUser.save();
     newAddress.save();
     newAccount.save();
     newUserPersonalData.save();
+
+    newUser.address = Promise.resolve(newAddress);
+    newUser.account = Promise.resolve(newAccount);
+    newUser.personalData = Promise.resolve(newUserPersonalData);
+    await newUser.save();
 
     return {
       code: ResponseCode.ProcessedWithoutConfirmationWaiting,

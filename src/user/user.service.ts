@@ -121,11 +121,7 @@ export class UserService {
     newUserPersonalData.user = Promise.resolve(newUser);
     newAddress.user = Promise.resolve(newUser);
 
-    /*newUser.address = Promise.resolve(newAddress);
-    newUser.account = Promise.resolve(newAccount);
-    newUser.personalData = Promise.resolve(newUserPersonalData);*/
-
-    /*this.mailer.sendMail({
+    this.mailer.sendMail({
       to: newUser.email,
       template: 'activateNewAccount',
       subject: `Welcome on board, let's activate your account`,
@@ -133,11 +129,12 @@ export class UserService {
         username: `${newUserPersonalData.name} ${newUserPersonalData.surname}`,
         activateLink: `http://localhost:3002/user/activate/${newAccount.activationCode}`,
       },
-    });*/
+    });
+
     await newUser.save();
-    newAddress.save();
-    newAccount.save();
-    newUserPersonalData.save();
+    await newAddress.save();
+    await newAccount.save();
+    await newUserPersonalData.save();
 
     newUser.address = Promise.resolve(newAddress);
     newUser.account = Promise.resolve(newAccount);

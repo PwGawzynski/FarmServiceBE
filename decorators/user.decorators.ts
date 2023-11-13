@@ -6,9 +6,8 @@ import {
 } from '@nestjs/common';
 import { User } from '../src/user/entities/user.entity';
 import { printWarnToConsole } from '../Helpers/printWarnToConsole';
-import { UserRole } from '../FarmServiceTypes/User/Enums';
 
-function throwError(msg: string) {
+export function throwError(msg: string) {
   printWarnToConsole('CAUSER DOES NOT EXIST IN DB', 'USER-DECORATOR');
   throw new HttpException('Unauthorised. ' + msg, HttpStatus.UNAUTHORIZED);
 }
@@ -18,17 +17,7 @@ function throwError(msg: string) {
  */
 export const GetUser = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest();
-    const user = await User.findOne({
-      where: {
-        id: request.user.id,
-      },
-    });
-    const isAccountActivated = !!(await user.account).isActivated;
-    if (!user && isAccountActivated) {
-      printWarnToConsole('CAUSER DOES NOT EXIST IN DB', 'USER-DECORATOR');
-      throw new HttpException('Unauthorised', HttpStatus.UNAUTHORIZED);
-    }
+    const user: User = ctx.switchToHttp().getRequest().user;
     return user;
   },
 );
@@ -39,23 +28,9 @@ export const GetUser = createParamDecorator(
  */
 export const GetOwnedCompany = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest();
-    const user = await User.findOne({
-      where: {
-        id: request.user.id,
-      },
-    });
-    const isAccountActivated = (await user.account).isActivated;
-    const isOwner = user.role === UserRole.owner;
-
-    if (!user && isAccountActivated)
-      throwError('User does not exist, or account is not activated');
-
-    if (!isOwner) throwError('Unauthorised. You do not have owner role');
-
+    const user = ctx.switchToHttp().getRequest().user;
     if (!(await user.company))
       throwError("Unauthorised. Ypu don't have registered company");
-
     return user;
   },
 );

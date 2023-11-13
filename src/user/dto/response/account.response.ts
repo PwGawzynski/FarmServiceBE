@@ -7,14 +7,13 @@ export class AccountWhiteList {
   }
   @Expose()
   theme: Theme;
-  @Expose()
-  activationCode: string;
 }
 
 @Exclude()
 export class AccountResponseDto extends AccountWhiteList {
   id: string;
   isActivated: boolean;
+  activationCode: string;
   constructor(partial: Partial<AccountResponseDto>) {
     super(partial);
     Object.assign(this, partial);

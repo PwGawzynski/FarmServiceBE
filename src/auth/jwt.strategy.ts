@@ -1,7 +1,14 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { User } from '../user/entities/user.entity';
+import { printWarnToConsole } from '../../Helpers/printWarnToConsole';
 
 /**
  * This cals is used for implement passport JWT strategy
@@ -25,6 +32,17 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   async validate(payload, done: (error, user) => void) {
     if (!payload || !payload.userId) done(new UnauthorizedException(), false);
 
-    return done(null, payload);
+    const user = await User.findOne({
+      where: {
+        id: payload.userId,
+      },
+    });
+    const isAccountActivated = !!(await user.account).isActivated;
+    if (!user && isAccountActivated) {
+      printWarnToConsole('CAUSER DOES NOT EXIST IN DB', 'USER-DECORATOR');
+      throw new HttpException('Unauthorised', HttpStatus.UNAUTHORIZED);
+    }
+
+    return done(null, user);
   }
 }

@@ -50,13 +50,17 @@ export class UserService {
   /**
    * Method which validate if given user already exist
    * @param createUserData
+   * @param userIdentityId user's ID from identity system, ( user id in be is the same as in identity )
    * @throws HttpException when user already exist
    */
-  async _validateUser(createUserData: CreateUserDto) {
+  async _validateUser(createUserData: CreateUserDto, userIdentityId: string) {
     const result = await User.findOne({
       where: [
         {
           email: createUserData.email,
+        },
+        {
+          id: userIdentityId,
         },
         {
           userLoginIdentificator: createUserData.userLoginIdentificator,
@@ -66,12 +70,15 @@ export class UserService {
     if (result)
       throw new HttpException(
         {
-          message: `User with ${
-            result.userLoginIdentificator ===
-            createUserData.userLoginIdentificator
-              ? 'nickname'
-              : 'email'
-          } already exist`,
+          message:
+            result.id === userIdentityId
+              ? 'User with given access_token already exist'
+              : `User with ${
+                  result.userLoginIdentificator ===
+                  createUserData.userLoginIdentificator
+                    ? 'nickname'
+                    : 'email'
+                } already exist`,
           eCode: ErrorCodes.AlreadyExist,
         } as ErrorPayloadObject,
         HttpStatus.CONFLICT,
@@ -86,7 +93,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto, req: Request) {
     const { userId, userLogin } = this._getUserIdFromReq(req);
 
-    await this._validateUser(createUserDto);
+    await this._validateUser(createUserDto, userId);
 
     const newUser = new User();
     const newAccount = new Account();

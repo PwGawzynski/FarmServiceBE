@@ -13,8 +13,8 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Request } from 'express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { GetUser } from '../../decorators/user.decorator';
 import { User } from './entities/user.entity';
+import { GetUser } from '../../decorators/user.decorators';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')

@@ -34,7 +34,7 @@ export class UserController {
   }
 
   @Get('activate/:activationCode')
-  activate(@Param('activationCode') activationCode) {
+  activate(@Param('activationCode') activationCode: string) {
     console.log(activationCode);
     return this.userService.activate(activationCode);
   }

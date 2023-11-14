@@ -6,15 +6,14 @@ import {
   Param,
   Post,
   Req,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Request } from 'express';
-import { JwtAuthGuard } from '../auth/jwt-auth.guards';
 import { User } from './entities/user.entity';
 import { GetUser } from '../../decorators/user.decorators';
+import { AllowOnlyByToken, Public } from '../../decorators/auth.decorators';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
@@ -27,20 +26,20 @@ export class UserController {
    * @param req - req obj from express
    */
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @AllowOnlyByToken()
   create(@Body() createUserDto: CreateUserDto, @Req() req: Request) {
     console.log(createUserDto, 'TEST');
     return this.userService.create(createUserDto, req);
   }
 
   @Get('activate/:activationCode')
-  activate(@Param('activationCode') activationCode) {
+  @Public()
+  activate(@Param('activationCode') activationCode: string) {
     console.log(activationCode);
     return this.userService.activate(activationCode);
   }
 
   @Get('me')
-  @UseGuards(JwtAuthGuard)
   async getUserByToken(@GetUser() user: User) {
     return this.userService.getUserAccountData(user);
   }

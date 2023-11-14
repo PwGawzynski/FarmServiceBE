@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   Entity,
   Index,
@@ -8,13 +9,13 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Address } from '../../commonEntities/address.entity';
 import { User } from '../../user/entities/user.entity';
 import { Worker } from '../../worker/entities/worker.entity';
 import CompanyConstants from '../../../FarmServiceTypes/Company/Constants';
+import { CompanyAddress } from '../../commonEntities/company-address.entity';
 
 @Entity()
-export class Company {
+export class Company extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -25,9 +26,10 @@ export class Company {
   })
   name: string;
 
-  @ManyToOne(() => Address)
+  @ManyToOne(() => CompanyAddress)
+  @Index('UNIQ_COMPANY_ADDRESS', { unique: true })
   @JoinColumn()
-  address: Promise<Address>;
+  address: Promise<CompanyAddress>;
 
   @OneToOne(() => User, (user) => user.company, { nullable: false })
   @Index('UNIQ_USER', { unique: true })

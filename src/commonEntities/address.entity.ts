@@ -57,7 +57,7 @@ export class Address extends BaseEntity {
     length: 20,
     nullable: true,
   })
-  apartmentNumber?: string;
+  apartmentNumber?: string | undefined;
 
   @OneToOne(() => User, (user) => user.address, { nullable: false })
   @JoinColumn()

@@ -46,6 +46,15 @@ export class UserService {
       );
     return { userId, userLogin };
   }
+  async _returnUser(user: User): Promise<UserResponseDto> {
+    return new UserResponseDto({
+      email: user.email,
+      role: user.role,
+      personalDataId: (await user.personalData).id,
+      addressId: (await user.address).id,
+      accountId: (await user.account).id,
+    });
+  }
 
   /**
    * Method which validate if given user already exist
@@ -150,10 +159,11 @@ export class UserService {
 
     return {
       code: ResponseCode.ProcessedWithoutConfirmationWaiting,
-    } as ResponseObject;
+      payload: await this._returnUser(newUser),
+    } as ResponseObject<UserResponseDto>;
   }
 
-  async activate(activationCode) {
+  async activate(activationCode: string) {
     const user = await User.findOne({
       where: {
         account: {
@@ -179,24 +189,9 @@ export class UserService {
   }
 
   async getUserAccountData(user: User) {
-    const userData = new UserResponseDto({
-      email: user.email,
-      role: user.role,
-      personalData: new UserPersonalDataResponseDto({
-        // this is because of lazy loading, related tables must be awaited to get its data from db
-        ...(await user.personalData),
-      }),
-      address: new AddressResponseDto({
-        ...(await user.address),
-      }),
-      account: new AccountResponseDto({
-        ...(await user.account),
-      }),
-    });
-
     return {
       code: ResponseCode.ProcessedCorrect,
-      payload: userData,
-    } as ResponseObject;
+      payload: await this._returnUser(user),
+    } as ResponseObject<UserResponseDto>;
   }
 }

@@ -7,7 +7,7 @@ import configuration from '../config/configuration';
 import { UserModule } from './user/user.module';
 import * as process from 'process';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { GlobalExceptionFilter } from '../ExceptionFilters/GlobalFilter';
 import { MailingModule } from './mailing/mailing.module';
 import { MailerModule } from '@nestjs-modules/mailer';
@@ -19,6 +19,8 @@ import { CompanyModule } from './company/company.module';
 import { WorkerModule } from './worker/worker.module';
 import { OrderModule } from './order/order.module';
 import { TaskModule } from './task/task.module';
+import { RolesGuard } from '../Guards/RoleGuard';
+import { JwtAuthGuard } from './auth/jwt-auth.guards';
 
 @Module({
   imports: [
@@ -63,6 +65,14 @@ import { TaskModule } from './task/task.module';
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })

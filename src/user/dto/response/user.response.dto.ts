@@ -2,7 +2,7 @@ import { UserPersonalDataResponseDto } from './userPersonalData.response.dto';
 import { AddressResponseDto } from '../../../commonEntities/dto/response/address.response.dto';
 import { AccountResponseDto } from './account.response';
 import { UserRole } from '../../../../FarmServiceTypes/User/Enums';
-import { Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 export class UserResponseWhiteListDto {
   constructor(partial: Partial<UserResponseWhiteListDto>) {
@@ -13,13 +13,14 @@ export class UserResponseWhiteListDto {
   @Expose()
   role: UserRole;
   @Expose()
-  personalData: UserPersonalDataResponseDto;
+  personalDataId: string;
   @Expose()
-  address: AddressResponseDto;
+  addressId: string;
   @Expose()
-  account: AccountResponseDto;
+  accountId: string;
 }
 
+@Exclude()
 export class UserResponseDto extends UserResponseWhiteListDto {
   constructor(partial: Partial<UserResponseDto>) {
     super(partial);

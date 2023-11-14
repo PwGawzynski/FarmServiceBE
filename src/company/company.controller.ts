@@ -1,17 +1,20 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { CompanyService } from './company.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guards';
-import { Owner } from '../../decorators/roles.decorator';
-import { RolesGuard } from '../../Guards/RoleGuard';
+import { Owner } from '../../decorators/auth.decorators';
+import { CreateCompanyDto } from './dto/create-company.dto';
+import { GetOwnedCompany } from '../../decorators/user.decorators';
+import { Company } from './entities/company.entity';
 
 @Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
-  @Get()
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post()
   @Owner()
-  async isOwner() {
-    console.log('dziala');
+  async create(
+    @Body() createCompanyDto: CreateCompanyDto,
+    @GetOwnedCompany() company: Company,
+  ) {
+    return this.companyService.create(createCompanyDto);
   }
 }

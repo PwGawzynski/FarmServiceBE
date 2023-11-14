@@ -14,13 +14,11 @@ export class UserPersonalDataWhiteList {
   phoneNumber: string;
 }
 
+@Exclude()
 export class UserPersonalDataResponseDto
   extends UserPersonalDataWhiteList
   implements GetUserPersonalDataResponse
 {
-  @Exclude()
-  id: string;
-
   constructor(partial: Partial<UserPersonalDataResponseDto>) {
     super(partial);
     Object.assign(this, partial);

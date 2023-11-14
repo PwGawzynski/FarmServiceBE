@@ -59,5 +59,5 @@ export class Field extends BaseEntity {
 
   @OneToMany(() => Task, (task) => task.field, { nullable: true })
   @JoinColumn({ name: 'appears_in_orders' })
-  appearsInOrders?: Promise<Order[]>;
+  appearsInOrders?: Promise<Order[] | undefined>;
 }

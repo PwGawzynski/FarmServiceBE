@@ -5,14 +5,11 @@ import {
   IsNotEmpty,
   IsNotEmptyObject,
   IsString,
-  IsUUID,
   Length,
   ValidateNested,
 } from 'class-validator';
 import { CreateAddressDto } from '../../commonEntities/dto/create-address.dto';
 import { Type } from 'class-transformer';
-import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReject.decorator';
-import { User } from '../../user/entities/user.entity';
 import CompanyConstants from '../../../FarmServiceTypes/Company/Constants';
 
 export class CreateCompanyDto
@@ -34,8 +31,4 @@ export class CreateCompanyDto
   @Type(() => CreateAddressDto)
   @ValidateNested()
   address: CreateAddressDto;
-
-  @IsUUID()
-  @FindOrReject(User, { message: 'Cannot find user with given ID' })
-  owner: string;
 }

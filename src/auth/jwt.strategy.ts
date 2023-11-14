@@ -1,14 +1,7 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { User } from '../user/entities/user.entity';
-import { printWarnToConsole } from '../../Helpers/printWarnToConsole';
 
 /**
  * This cals is used for implement passport JWT strategy

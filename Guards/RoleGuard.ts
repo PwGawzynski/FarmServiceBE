@@ -3,19 +3,19 @@ import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import { User } from '../src/user/entities/user.entity';
 import { UserRole } from '../FarmServiceTypes/User/Enums';
+import { User } from '../src/user/entities/user.entity';
+import { printWarnToConsole } from '../Helpers/printWarnToConsole';
 
 function matchRoles(roles: Array<UserRole>, userRole: UserRole) {
   if (!roles.includes(userRole))
     throw new ForbiddenException(
       undefined,
-      `Your role: ${UserRole[
-        userRole
-      ].toUpperCase()} is not granted to perform this action`,
+      `Your role: ${UserRole[userRole]} is not granted to perform this action`,
     );
   else return true;
 }
@@ -23,16 +23,20 @@ function matchRoles(roles: Array<UserRole>, userRole: UserRole) {
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const roles = this.reflector.get('roles', context.getHandler());
-    console.log(roles, 'elloo');
+    // due to RolesGuard id APP scope we have to return true if no role is defined
     if (!roles) {
       return true;
     }
-    const request = context.switchToHttp().getRequest();
-    const user: User = request.user;
-    return matchRoles(roles, user.role);
+    const user = context.switchToHttp().getRequest().user;
+    if (user instanceof User) {
+      return matchRoles(roles, user.role);
+    }
+    printWarnToConsole('REQ.USER IS UNDEFENDED', 'ROLES_GUARD');
+    throw new HttpException(
+      'Something went wrong',
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   }
 }

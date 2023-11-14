@@ -1,14 +1,16 @@
 import {
+  ConflictException,
   createParamDecorator,
   ExecutionContext,
   HttpException,
   HttpStatus,
+  InternalServerErrorException,
 } from '@nestjs/common';
-import { User } from '../src/user/entities/user.entity';
 import { printWarnToConsole } from '../Helpers/printWarnToConsole';
+import { User } from '../src/user/entities/user.entity';
 
-export function throwError(msg: string) {
-  printWarnToConsole('CAUSER DOES NOT EXIST IN DB', 'USER-DECORATOR');
+export function throwError(msg: string, warnMsg: string, location: string) {
+  printWarnToConsole(warnMsg, location);
   throw new HttpException('Unauthorised. ' + msg, HttpStatus.UNAUTHORIZED);
 }
 
@@ -17,20 +19,19 @@ export function throwError(msg: string) {
  */
 export const GetUser = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
-    const user: User = ctx.switchToHttp().getRequest().user;
-    return user;
+    return ctx.switchToHttp().getRequest().user;
   },
 );
 
-/**
- * This decorator checks if causer is owner, if yes returned owner with fetched company data
- *  @throws error when causer is not owner, or doesn't have any company
- */
 export const GetOwnedCompany = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const user = ctx.switchToHttp().getRequest().user;
-    if (!(await user.company))
-      throwError("Unauthorised. Ypu don't have registered company");
-    return user;
+    if (!(user instanceof User)) {
+      printWarnToConsole('REQ.USER IS UNDEFENDED', 'GET_OWNED_COMPANY');
+      throw new InternalServerErrorException(undefined, 'Something went wrong');
+    }
+    const company = await user.company;
+    if (!company) throw new ConflictException("Causer don't have company");
+    return company;
   },
 );

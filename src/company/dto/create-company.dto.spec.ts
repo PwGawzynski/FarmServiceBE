@@ -3,12 +3,13 @@ import {
   Equal,
 } from '../../../TypeScriptHelpers/dtoToInterface';
 import { CreateCompanyReqI } from '../../../FarmServiceTypes/Common/Requests';
+import { CreateCompanyDto } from './create-company.dto';
 
 /**
  * Here we omit nested interface, nested type check in research
  */
 const test: Equal<
-  Omit<DtoToInterface<CreateCompanyReqI>, 'address'>,
+  Omit<DtoToInterface<CreateCompanyDto>, 'address'>,
   Omit<CreateCompanyReqI, 'address'>
 > = true;
 

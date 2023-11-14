@@ -2,8 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { Owner } from '../../decorators/auth.decorators';
 import { CreateCompanyDto } from './dto/create-company.dto';
-import { GetOwnedCompany, GetUser } from '../../decorators/user.decorators';
-import { Company } from './entities/company.entity';
+import { GetUser } from '../../decorators/user.decorators';
 import { User } from '../user/entities/user.entity';
 
 @Controller('company')

@@ -46,6 +46,39 @@ export class UserService {
       );
     return { userId, userLogin };
   }
+  async _returnUser(user: User): Promise<UserResponseDto> {
+    const personalData = await user.personalData;
+    /**
+     * !!!! THIS assignment user = undefined have to be done due to circular dependency it courses
+     */
+    personalData.user = undefined;
+
+    const address = await user.address;
+    /**
+     * !!!! THIS assignment user = undefined have to be done due to circular dependency it courses
+     */
+    address.user = undefined;
+
+    const account = await user.account;
+    /**
+     * !!!! THIS assignment user = undefined have to be done due to circular dependency it courses
+     */
+    account.user = undefined;
+
+    return new UserResponseDto({
+      email: user.email,
+      role: user.role,
+      personalData: new UserPersonalDataResponseDto({
+        ...personalData,
+      }),
+      address: new AddressResponseDto({
+        ...address,
+      }),
+      account: new AccountResponseDto({
+        ...account,
+      }),
+    });
+  }
 
   /**
    * Method which validate if given user already exist
@@ -150,10 +183,11 @@ export class UserService {
 
     return {
       code: ResponseCode.ProcessedWithoutConfirmationWaiting,
-    } as ResponseObject;
+      payload: await this._returnUser(newUser),
+    } as ResponseObject<UserResponseDto>;
   }
 
-  async activate(activationCode) {
+  async activate(activationCode: string) {
     const user = await User.findOne({
       where: {
         account: {
@@ -179,24 +213,9 @@ export class UserService {
   }
 
   async getUserAccountData(user: User) {
-    const userData = new UserResponseDto({
-      email: user.email,
-      role: user.role,
-      personalData: new UserPersonalDataResponseDto({
-        // this is because of lazy loading, related tables must be awaited to get its data from db
-        ...(await user.personalData),
-      }),
-      address: new AddressResponseDto({
-        ...(await user.address),
-      }),
-      account: new AccountResponseDto({
-        ...(await user.account),
-      }),
-    });
-
     return {
       code: ResponseCode.ProcessedCorrect,
-      payload: userData,
-    } as ResponseObject;
+      payload: await this._returnUser(user),
+    } as ResponseObject<UserResponseDto>;
   }
 }

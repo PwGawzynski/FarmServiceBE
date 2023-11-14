@@ -35,5 +35,5 @@ export class Company {
   owner: Promise<User>;
 
   @OneToMany(() => Worker, (worker) => worker.company, { nullable: true })
-  workers?: Promise<Worker>;
+  workers?: Promise<Worker | undefined>;
 }

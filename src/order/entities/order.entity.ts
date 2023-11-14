@@ -96,5 +96,5 @@ export class Order {
 
   @OneToMany(() => Task, (task) => task.order, { nullable: true })
   @JoinColumn()
-  fields?: Promise<Field[]>;
+  fields?: Promise<Field[] | undefined>;
 }

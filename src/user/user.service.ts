@@ -47,36 +47,12 @@ export class UserService {
     return { userId, userLogin };
   }
   async _returnUser(user: User): Promise<UserResponseDto> {
-    const personalData = await user.personalData;
-    /**
-     * !!!! THIS assignment user = undefined have to be done due to circular dependency it courses
-     */
-    personalData.user = undefined;
-
-    const address = await user.address;
-    /**
-     * !!!! THIS assignment user = undefined have to be done due to circular dependency it courses
-     */
-    address.user = undefined;
-
-    const account = await user.account;
-    /**
-     * !!!! THIS assignment user = undefined have to be done due to circular dependency it courses
-     */
-    account.user = undefined;
-
     return new UserResponseDto({
       email: user.email,
       role: user.role,
-      personalData: new UserPersonalDataResponseDto({
-        ...personalData,
-      }),
-      address: new AddressResponseDto({
-        ...address,
-      }),
-      account: new AccountResponseDto({
-        ...account,
-      }),
+      personalDataId: (await user.personalData).id,
+      addressId: (await user.address).id,
+      accountId: (await user.account).id,
     });
   }
 

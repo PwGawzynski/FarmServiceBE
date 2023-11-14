@@ -13,11 +13,11 @@ export class UserResponseWhiteListDto {
   @Expose()
   role: UserRole;
   @Expose()
-  personalData: UserPersonalDataResponseDto;
+  personalDataId: string;
   @Expose()
-  address: AddressResponseDto;
+  addressId: string;
   @Expose()
-  account: AccountResponseDto;
+  accountId: string;
 }
 
 @Exclude()

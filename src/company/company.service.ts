@@ -4,7 +4,6 @@ import { User } from '../user/entities/user.entity';
 import { Company } from './entities/company.entity';
 import * as console from 'console';
 import { CompanyAddress } from '../commonEntities/company-address.entity';
-import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class CompanyService {

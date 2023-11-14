@@ -91,7 +91,7 @@ export class User extends BaseEntity {
   })
   @Index('UNIQ_COMPANY', { unique: true })
   @JoinColumn()
-  company?: Promise<Company>;
+  company?: Promise<Company | undefined>;
 
   @OneToOne(() => Worker, (worker) => worker.user, {
     nullable: true,
@@ -99,8 +99,8 @@ export class User extends BaseEntity {
   })
   @Index('UNIQ_WORKER', { unique: true })
   @JoinColumn()
-  worker?: Promise<Worker>;
+  worker?: Promise<Worker | undefined>;
 
   @OneToMany(() => Order, (order) => order.client, { nullable: true })
-  orders?: Promise<Order[]>;
+  orders?: Promise<Order[] | undefined>;
 }

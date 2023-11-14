@@ -46,17 +46,30 @@ export class UserService {
       );
     return { userId, userLogin };
   }
+  async _returnUser(user: User): Promise<UserResponseDto> {
+    return new UserResponseDto({
+      email: user.email,
+      role: user.role,
+      personalDataId: (await user.personalData).id,
+      addressId: (await user.address).id,
+      accountId: (await user.account).id,
+    });
+  }
 
   /**
    * Method which validate if given user already exist
    * @param createUserData
+   * @param userIdentityId user's ID from identity system, ( user id in be is the same as in identity )
    * @throws HttpException when user already exist
    */
-  async _validateUser(createUserData: CreateUserDto) {
+  async _validateUser(createUserData: CreateUserDto, userIdentityId: string) {
     const result = await User.findOne({
       where: [
         {
           email: createUserData.email,
+        },
+        {
+          id: userIdentityId,
         },
         {
           userLoginIdentificator: createUserData.userLoginIdentificator,
@@ -66,12 +79,15 @@ export class UserService {
     if (result)
       throw new HttpException(
         {
-          message: `User with ${
-            result.userLoginIdentificator ===
-            createUserData.userLoginIdentificator
-              ? 'nickname'
-              : 'email'
-          } already exist`,
+          message:
+            result.id === userIdentityId
+              ? 'User with given access_token already exist'
+              : `User with ${
+                  result.userLoginIdentificator ===
+                  createUserData.userLoginIdentificator
+                    ? 'nickname'
+                    : 'email'
+                } already exist`,
           eCode: ErrorCodes.AlreadyExist,
         } as ErrorPayloadObject,
         HttpStatus.CONFLICT,
@@ -86,7 +102,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto, req: Request) {
     const { userId, userLogin } = this._getUserIdFromReq(req);
 
-    await this._validateUser(createUserDto);
+    await this._validateUser(createUserDto, userId);
 
     const newUser = new User();
     const newAccount = new Account();
@@ -121,11 +137,7 @@ export class UserService {
     newUserPersonalData.user = Promise.resolve(newUser);
     newAddress.user = Promise.resolve(newUser);
 
-    /*newUser.address = Promise.resolve(newAddress);
-    newUser.account = Promise.resolve(newAccount);
-    newUser.personalData = Promise.resolve(newUserPersonalData);*/
-
-    /*this.mailer.sendMail({
+    this.mailer.sendMail({
       to: newUser.email,
       template: 'activateNewAccount',
       subject: `Welcome on board, let's activate your account`,
@@ -133,11 +145,12 @@ export class UserService {
         username: `${newUserPersonalData.name} ${newUserPersonalData.surname}`,
         activateLink: `http://localhost:3002/user/activate/${newAccount.activationCode}`,
       },
-    });*/
+    });
+
     await newUser.save();
-    newAddress.save();
-    newAccount.save();
-    newUserPersonalData.save();
+    await newAddress.save();
+    await newAccount.save();
+    await newUserPersonalData.save();
 
     newUser.address = Promise.resolve(newAddress);
     newUser.account = Promise.resolve(newAccount);
@@ -146,10 +159,11 @@ export class UserService {
 
     return {
       code: ResponseCode.ProcessedWithoutConfirmationWaiting,
-    } as ResponseObject;
+      payload: await this._returnUser(newUser),
+    } as ResponseObject<UserResponseDto>;
   }
 
-  async activate(activationCode) {
+  async activate(activationCode: string) {
     const user = await User.findOne({
       where: {
         account: {
@@ -175,24 +189,9 @@ export class UserService {
   }
 
   async getUserAccountData(user: User) {
-    const userData = new UserResponseDto({
-      email: user.email,
-      role: user.role,
-      personalData: new UserPersonalDataResponseDto({
-        // this is because of lazy loading, related tables must be awaited to get its data from db
-        ...(await user.personalData),
-      }),
-      address: new AddressResponseDto({
-        ...(await user.address),
-      }),
-      account: new AccountResponseDto({
-        ...(await user.account),
-      }),
-    });
-
     return {
       code: ResponseCode.ProcessedCorrect,
-      payload: userData,
-    } as ResponseObject;
+      payload: await this._returnUser(user),
+    } as ResponseObject<UserResponseDto>;
   }
 }

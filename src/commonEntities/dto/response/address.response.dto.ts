@@ -28,13 +28,11 @@ export class AddressWhiteList {
   postalCode: string;
 }
 
+@Exclude()
 export class AddressResponseDto
   extends AddressWhiteList
   implements GetUserAddressDataResponse
 {
-  @Exclude()
-  id: string;
-
   constructor(partial: Partial<AddressResponseDto>) {
     super(partial);
     Object.assign(this, partial);

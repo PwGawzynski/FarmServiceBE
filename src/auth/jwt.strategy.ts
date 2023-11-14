@@ -31,18 +31,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
    */
   async validate(payload, done: (error, user) => void) {
     if (!payload || !payload.userId) done(new UnauthorizedException(), false);
-
-    const user = await User.findOne({
-      where: {
-        id: payload.userId,
-      },
-    });
-    const isAccountActivated = !!(await user.account).isActivated;
-    if (!user && isAccountActivated) {
-      printWarnToConsole('CAUSER DOES NOT EXIST IN DB', 'USER-DECORATOR');
-      throw new HttpException('Unauthorised', HttpStatus.UNAUTHORIZED);
-    }
-
-    return done(null, user);
+    return done(null, payload);
   }
 }

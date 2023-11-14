@@ -2,8 +2,9 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { Owner } from '../../decorators/auth.decorators';
 import { CreateCompanyDto } from './dto/create-company.dto';
-import { GetOwnedCompany } from '../../decorators/user.decorators';
+import { GetOwnedCompany, GetUser } from '../../decorators/user.decorators';
 import { Company } from './entities/company.entity';
+import { User } from '../user/entities/user.entity';
 
 @Controller('company')
 export class CompanyController {
@@ -13,8 +14,8 @@ export class CompanyController {
   @Owner()
   async create(
     @Body() createCompanyDto: CreateCompanyDto,
-    @GetOwnedCompany() company: Company,
+    @GetUser() user: User,
   ) {
-    return this.companyService.create(createCompanyDto);
+    return this.companyService.create(createCompanyDto, user);
   }
 }

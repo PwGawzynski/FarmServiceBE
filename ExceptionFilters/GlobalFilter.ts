@@ -44,7 +44,6 @@ export class GlobalExceptionFilter implements ExceptionFilter {
           eCode: response?.eCode,
         },
       } as ResponseObject<ErrorPayloadObject>;
-      console.log(responseBody, 'ERROR RESPONSE BODY');
       httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
     } else
       httpAdapter.reply(

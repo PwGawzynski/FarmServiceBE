@@ -23,7 +23,7 @@ export const GetUser = createParamDecorator(
   },
 );
 
-export const GetOwnedCompany = createParamDecorator(
+export const GetOwnedActiveCompanies = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const user = ctx.switchToHttp().getRequest().user;
     if (!(user instanceof User)) {
@@ -31,7 +31,9 @@ export const GetOwnedCompany = createParamDecorator(
       throw new InternalServerErrorException(undefined, 'Something went wrong');
     }
     const company = await user.company;
-    if (!company) throw new ConflictException("Causer don't have company");
+    const activeCompanies = company.filter((company) => company.active);
+    if (!activeCompanies.length)
+      throw new ConflictException("Causer don't have company");
     return company;
   },
 );

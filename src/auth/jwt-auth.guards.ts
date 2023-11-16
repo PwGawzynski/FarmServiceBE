@@ -20,7 +20,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       },
     });
     const isAccountActivated = !!(await user.account).isActivated;
-    if (!user && isAccountActivated) {
+    if (user && !isAccountActivated) {
       throwError(
         `User don't exist or account is not activated`,
         'USER DONT EXIST IN DB OR NOT ACTIVATED',

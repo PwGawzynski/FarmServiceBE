@@ -50,13 +50,18 @@ export class Company extends BaseEntity {
   @JoinColumn()
   address: Promise<CompanyAddress>;
 
-  @OneToOne(() => User, (user) => user.company, { nullable: false })
-  @Index('UNIQ_USER', { unique: true })
+  @ManyToOne(() => User, (user) => user.company, { nullable: false })
   @JoinColumn()
   owner: Promise<User>;
 
   @OneToMany(() => Worker, (worker) => worker.company, { nullable: true })
   workers?: Promise<Array<Worker> | undefined>;
+
+  @Column({
+    type: 'boolean',
+    default: true,
+  })
+  active?: boolean;
 
   async _shouldNotExist() {
     const exist = await Company.findOne({
@@ -64,6 +69,7 @@ export class Company extends BaseEntity {
         owner: {
           id: (await this.owner).id,
         },
+        active: true,
       },
     });
     if (exist) throw new ConflictException(this.CAUSER_HAS_COMPANY);

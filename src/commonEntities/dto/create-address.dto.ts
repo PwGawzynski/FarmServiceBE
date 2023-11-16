@@ -84,4 +84,14 @@ export class CreateAddressDto implements AddressDataTransferObjectI {
   @Matches('^[0-9]{2}-[0-9]{3}$')
   @Length(AddressConstants.POSTAL_CODE_LEN, AddressConstants.POSTAL_CODE_LEN)
   postalCode: string;
+
+  public *[Symbol.iterator]() {
+    yield this.city;
+    yield this.county;
+    yield this.voivodeship;
+    yield this.postalCode;
+    yield this.street;
+    yield this.houseNumber;
+    yield this.apartmentNumber;
+  }
 }

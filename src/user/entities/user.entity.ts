@@ -85,13 +85,12 @@ export class User extends BaseEntity {
   @ManyToMany(() => Notification, (notification) => notification.recipients)
   addressedNotifications: Promise<Notification[]>;
 
-  @OneToOne(() => Company, (company) => company.owner, {
+  @OneToMany(() => Company, (company) => company.owner, {
     nullable: true,
     onDelete: 'CASCADE',
   })
-  @Index('UNIQ_COMPANY', { unique: true })
   @JoinColumn()
-  company?: Promise<Company | undefined>;
+  company?: Promise<Array<Company> | undefined>;
 
   @OneToOne(() => Worker, (worker) => worker.user, {
     nullable: true,

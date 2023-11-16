@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { printWarnToConsole } from '../Helpers/printWarnToConsole';
 import { User } from '../src/user/entities/user.entity';
+import { Company } from '../src/company/entities/company.entity';
 
 export function throwError(msg: string, warnMsg: string, location: string) {
   printWarnToConsole(warnMsg, location);
@@ -23,7 +24,7 @@ export const GetUser = createParamDecorator(
   },
 );
 
-export const GetOwnedCompany = createParamDecorator(
+export const GetOwnedActiveCompanies = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const user = ctx.switchToHttp().getRequest().user;
     if (!(user instanceof User)) {
@@ -31,7 +32,9 @@ export const GetOwnedCompany = createParamDecorator(
       throw new InternalServerErrorException(undefined, 'Something went wrong');
     }
     const company = await user.company;
-    if (!company) throw new ConflictException("Causer don't have company");
+    const activeCompanies = company.filter((company) => company.active);
+    if (!activeCompanies.length)
+      throw new ConflictException("Causer don't have company");
     return company;
   },
 );

@@ -2,35 +2,43 @@ import { Injectable } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { User } from '../user/entities/user.entity';
 import { Company } from './entities/company.entity';
-import * as console from 'console';
 import { CompanyAddress } from '../commonEntities/company-address.entity';
+import {
+  ResponseCode,
+  ResponseObject,
+} from '../../FarmServiceTypes/respnse/responseGeneric';
+import { CompanyResponseDto } from './dto/response/company.response.dto';
 
 @Injectable()
 export class CompanyService {
   async create(createCompanyDto: CreateCompanyDto, user: User) {
-    const newCompany = new Company();
-    const newAddress = new CompanyAddress();
+    const newCompany = new Company({
+      ...createCompanyDto,
+      address: undefined,
+      workers: undefined,
+      owner: Promise.resolve(user),
+    });
+    const newAddress = new CompanyAddress({
+      ...createCompanyDto.address,
+      company: Promise.resolve(newCompany),
+    });
 
-    newCompany.name = createCompanyDto.name;
-    newCompany.owner = Promise.resolve(user);
+    await newCompany._shouldNotExist();
     await newCompany.save();
-
-    newAddress.city = createCompanyDto.address.city;
-    newAddress.county = createCompanyDto.address.county;
-    newAddress.street = createCompanyDto.address.street;
-    newAddress.voivodeship = createCompanyDto.address.voivodeship;
-    newAddress.houseNumber = createCompanyDto.address.houseNumber;
-    newAddress.apartmentNumber = createCompanyDto.address.apartmentNumber;
-    newAddress.postalCode = createCompanyDto.address.postalCode;
-    newAddress.company = Promise.resolve(newCompany);
-
     await newAddress.save();
-
+    /**
+     * Company is updated with addressID due to OneToOne relation, we cannot save it in parallel
+     */
     newCompany.address = Promise.resolve(newAddress);
+    // await is not necessary here, because update is performed in db
     newCompany.save();
 
-    console.log(newCompany);
-    // TODO return DTO
-    return 'okks';
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: new CompanyResponseDto({
+        name: newCompany.name,
+        addressId: newAddress.id,
+      }),
+    } as ResponseObject<CompanyResponseDto>;
   }
 }

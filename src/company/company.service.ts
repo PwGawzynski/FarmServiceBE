@@ -41,4 +41,14 @@ export class CompanyService {
       }),
     } as ResponseObject<CompanyResponseDto>;
   }
+
+  async getCompanyInfo(company: Company) {
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: new CompanyResponseDto({
+        name: company.name,
+        addressId: (await company.address).id,
+      }),
+    } as ResponseObject<CompanyResponseDto>;
+  }
 }

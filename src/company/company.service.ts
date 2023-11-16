@@ -33,6 +33,9 @@ export class CompanyService {
     // await is not necessary here, because update is performed in db
     newCompany.save();
 
+    user.company = Promise.resolve(newCompany);
+    user.save();
+
     return {
       code: ResponseCode.ProcessedCorrect,
       payload: new CompanyResponseDto({

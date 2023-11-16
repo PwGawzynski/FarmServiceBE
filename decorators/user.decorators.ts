@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { printWarnToConsole } from '../Helpers/printWarnToConsole';
 import { User } from '../src/user/entities/user.entity';
-import { Company } from '../src/company/entities/company.entity';
 
 export function throwError(msg: string, warnMsg: string, location: string) {
   printWarnToConsole(warnMsg, location);

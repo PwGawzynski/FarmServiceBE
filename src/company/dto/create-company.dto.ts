@@ -13,7 +13,8 @@ import { Type } from 'class-transformer';
 import CompanyConstants from '../../../FarmServiceTypes/Company/Constants';
 
 export class CreateCompanyDto
-  implements OmitBaseEntityAndId<Company, 'address' | 'owner'>
+  implements
+    OmitBaseEntityAndId<Company, 'address' | 'owner' | '_shouldNotExist'>
 {
   @IsString({ message: 'Company must be a string' })
   @IsNotEmpty({ message: 'Company name cannot be empty string' })
@@ -31,4 +32,8 @@ export class CreateCompanyDto
   @Type(() => CreateAddressDto)
   @ValidateNested()
   address: CreateAddressDto;
+
+  *[Symbol.iterator]() {
+    yield this.name;
+  }
 }

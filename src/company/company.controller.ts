@@ -5,7 +5,9 @@ import { CreateCompanyDto } from './dto/create-company.dto';
 import { GetOwnedCompany, GetUser } from '../../decorators/user.decorators';
 import { User } from '../user/entities/user.entity';
 import { Company } from './entities/company.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Company')
 @Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}

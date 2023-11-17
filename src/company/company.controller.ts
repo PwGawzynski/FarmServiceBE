@@ -1,11 +1,8 @@
-import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { Owner } from '../../decorators/auth.decorators';
 import { CreateCompanyDto } from './dto/create-company.dto';
-import {
-  GetOwnedActiveCompanies,
-  GetUser,
-} from '../../decorators/user.decorators';
+import { GetOwnedCompany, GetUser } from '../../decorators/user.decorators';
 import { User } from '../user/entities/user.entity';
 import { Company } from './entities/company.entity';
 
@@ -15,7 +12,7 @@ export class CompanyController {
 
   @Get()
   @Owner()
-  async getCompanyInfo(@GetOwnedActiveCompanies() company: Company) {
+  async getCompanyInfo(@GetOwnedCompany() company: Company) {
     return this.companyService.getCompanyInfo(company);
   }
 
@@ -30,7 +27,7 @@ export class CompanyController {
 
   @Delete()
   @Owner()
-  async delete(@GetOwnedActiveCompanies() company: Company[]) {
-    return this.companyService.delete(company);
+  async delete(@GetOwnedCompany() company: Company, @GetUser() user: User) {
+    return this.companyService.delete(company, user);
   }
 }

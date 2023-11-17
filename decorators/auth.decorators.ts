@@ -2,6 +2,10 @@ import { SetMetadata } from '@nestjs/common';
 import { UserRole } from '../FarmServiceTypes/User/Enums';
 import { JwtAuthGuard } from '../src/auth/jwt-auth.guards';
 
+/**
+ * Provides checking if action causer has owner role.
+ * @constructor
+ */
 export const Owner = () => SetMetadata('roles', [UserRole.owner]);
 export const Worker = () => SetMetadata('roles', [UserRole.worker]);
 

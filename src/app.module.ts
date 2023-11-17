@@ -21,6 +21,7 @@ import { OrderModule } from './order/order.module';
 import { TaskModule } from './task/task.module';
 import { RolesGuard } from '../Guards/RoleGuard';
 import { JwtAuthGuard } from './auth/jwt-auth.guards';
+import { CompanyAddressModule } from './company-address/company-address.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guards';
     WorkerModule,
     OrderModule,
     TaskModule,
+    CompanyAddressModule,
   ],
   controllers: [AppController],
   providers: [

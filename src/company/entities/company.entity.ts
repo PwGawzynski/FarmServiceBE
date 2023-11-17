@@ -11,7 +11,7 @@ import {
 import { User } from '../../user/entities/user.entity';
 import { Worker } from '../../worker/entities/worker.entity';
 import CompanyConstants from '../../../FarmServiceTypes/Company/Constants';
-import { CompanyAddress } from '../../commonEntities/company-address.entity';
+import { CompanyAddress } from '../../company-address/entities/company-address.entity';
 import { ConflictException } from '@nestjs/common';
 
 @Entity()

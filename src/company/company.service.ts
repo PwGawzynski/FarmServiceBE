@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { User } from '../user/entities/user.entity';
 import { Company } from './entities/company.entity';
-import { CompanyAddress } from '../commonEntities/company-address.entity';
+import { CompanyAddress } from '../company-address/entities/company-address.entity';
 import {
   ResponseCode,
   ResponseObject,

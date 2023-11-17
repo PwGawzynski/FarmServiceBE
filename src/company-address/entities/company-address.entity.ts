@@ -7,11 +7,11 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Company } from '../company/entities/company.entity';
+import { Company } from '../../company/entities/company.entity';
 
 @Entity()
 export class CompanyAddress extends BaseEntity {
-  constructor(options: {
+  constructor(options?: {
     city: string;
     county: string;
     postalCode: string;

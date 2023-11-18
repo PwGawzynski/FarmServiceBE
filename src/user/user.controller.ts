@@ -14,7 +14,9 @@ import { Request } from 'express';
 import { User } from './entities/user.entity';
 import { GetUser } from '../../decorators/user.decorators';
 import { AllowOnlyByToken, Public } from '../../decorators/auth.decorators';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UserController {

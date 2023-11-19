@@ -70,10 +70,4 @@ export class CreateFieldAddressDto
   @IsLatitude()
   @IsNotEmpty({ message: 'Latitude code cannot be empty' })
   latitude: string;
-
-  @IsNotEmptyObject()
-  @IsDefined()
-  @Type(() => CreateFieldDto)
-  @ValidateNested()
-  field: CreateFieldDto;
 }

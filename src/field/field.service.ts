@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '../user/entities/user.entity';
 import { CreateFieldDto } from './dto/create-field.dto';
 import { Field } from './entities/field.entity';
@@ -48,5 +48,20 @@ export class FieldService {
           }),
       ),
     );
+  }
+
+  async getOne(PLid: string) {
+    const field = await Field.findOne({
+      where: { polishSystemId: PLid },
+    });
+    if (!field) throw new NotFoundException('Cannot find field with given id');
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: new FieldResponseDto({
+        ...field,
+        owner_id: (await field.owner).id,
+        addressId: (await field.address).id,
+      }),
+    } as ResponseObject<FieldResponseDto>;
   }
 }

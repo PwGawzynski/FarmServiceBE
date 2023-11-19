@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { FieldService } from './field.service';
-import { Client } from '../../decorators/auth.decorators';
+import { AllRoles, Client } from '../../decorators/auth.decorators';
 import { GetUser } from '../../decorators/user.decorators';
 import { User } from '../user/entities/user.entity';
 import { CreateFieldDto } from './dto/create-field.dto';
@@ -24,5 +24,11 @@ export class FieldController {
   @Client()
   async getAllFields(@GetUser() user: User) {
     return this.fieldService.getAllFields(user);
+  }
+
+  @Get()
+  @AllRoles()
+  async getOne(@Param('PLid') PLid: string) {
+    return this.fieldService.getOne(PLid);
   }
 }

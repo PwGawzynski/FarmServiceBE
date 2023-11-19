@@ -1,8 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
-import { AddressResponseDto } from '../../../commonEntities/dto/response/address.response.dto';
 
 export class CompanyAddressResponseWhiteList {
-  constructor(partial: Partial<AddressResponseDto>) {
+  constructor(partial: Partial<CompanyAddressResponseWhiteList>) {
     Object.assign(this, partial);
   }
 

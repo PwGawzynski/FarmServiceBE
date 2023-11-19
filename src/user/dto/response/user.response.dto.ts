@@ -1,6 +1,3 @@
-import { UserPersonalDataResponseDto } from './userPersonalData.response.dto';
-import { AddressResponseDto } from '../../../commonEntities/dto/response/address.response.dto';
-import { AccountResponseDto } from './account.response';
 import { UserRole } from '../../../../FarmServiceTypes/User/Enums';
 import { Exclude, Expose } from 'class-transformer';
 

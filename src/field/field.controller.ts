@@ -5,7 +5,6 @@ import { GetUser } from '../../decorators/user.decorators';
 import { User } from '../user/entities/user.entity';
 import { CreateFieldDto } from './dto/create-field.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { use } from 'passport';
 
 @ApiTags('Field')
 @Controller('field')

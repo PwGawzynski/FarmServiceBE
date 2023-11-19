@@ -29,12 +29,24 @@ export class FieldService {
     return {
       code: ResponseCode.ProcessedWithoutConfirmationWaiting,
       payload: {
-        polishSystemId: newField.polishSystemId,
+        ...newField,
         owner_id: user.id,
-        area: newField.area,
-        dateOfCollectionData: newField.dateOfCollectionData,
         addressId: filedAddress.id,
       },
     } as ResponseObject<FieldResponseDto>;
+  }
+
+  async getAllFields(user: User) {
+    const fields = await user.fields;
+    return Promise.all(
+      fields.map(
+        async (field) =>
+          new FieldResponseDto({
+            ...field,
+            owner_id: user.id,
+            addressId: (await field.address).id,
+          }),
+      ),
+    );
   }
 }

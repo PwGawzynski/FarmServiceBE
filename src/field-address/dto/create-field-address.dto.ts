@@ -1,18 +1,13 @@
 import { OmitBaseEntityAndId } from '../../../SelfTypes/OmitBaseEntity';
 import { FieldAddress } from '../entities/field-address.entity';
 import {
-  IsDefined,
   IsLatitude,
   IsLongitude,
   IsNotEmpty,
-  IsNotEmptyObject,
   IsString,
   Length,
   Matches,
-  ValidateNested,
 } from 'class-validator';
-import { CreateFieldDto } from '../../field/dto/create-field.dto';
-import { Type } from 'class-transformer';
 import FieldAddressConstants from '../../../FarmServiceTypes/FiledAddress/Constants';
 
 export class CreateFieldAddressDto

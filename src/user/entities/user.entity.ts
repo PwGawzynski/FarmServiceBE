@@ -5,6 +5,7 @@ import {
   Index,
   JoinColumn,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -45,7 +46,7 @@ export class User extends BaseEntity {
   @Column({
     type: 'enum',
     enum: UserRole,
-    default: UserRole.worker,
+    default: UserRole.Worker,
   })
   role?: UserRole;
 
@@ -92,6 +93,10 @@ export class User extends BaseEntity {
   @Index('UNIQ_COMPANY', { unique: true })
   @JoinColumn()
   company?: Promise<Company | undefined>;
+
+  @ManyToOne(() => Company, (company) => company.clients, { nullable: true })
+  @JoinColumn({ name: 'client_at' })
+  clientAt: Promise<Company>;
 
   @OneToOne(() => Worker, (worker) => worker.user, {
     nullable: true,

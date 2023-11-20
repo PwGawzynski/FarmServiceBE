@@ -7,7 +7,7 @@ import { throwError } from '../../decorators/user.decorators';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  public static IS_CREATE_USER_ACTION = 'isCreateUserAction';
+  public static IS_ALLOWED_FOR_ALL_USERS = 'isCreateUserAction';
   public static IS_PUBLIC_PATH = 'isPublic';
   constructor(private reflector: Reflector) {
     super();
@@ -54,11 +54,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     console.log(isTokenCorrect, 'tooo');
     /**
      * Then we check if action is mark by @AllowOnlyByToken()
-     * if yes, we will skip finding user in db because action is for create one
+     * if yes, we will skip finding user in db because action authed only by token
      * if not we will search in DB user with id matched with this contained in token
      */
     const isCreateUserAction = this.reflector.getAllAndOverride(
-      JwtAuthGuard.IS_CREATE_USER_ACTION,
+      JwtAuthGuard.IS_ALLOWED_FOR_ALL_USERS,
       [context.getHandler(), context.getClass()],
     );
     console.log(isCreateUserAction, 'tessst');

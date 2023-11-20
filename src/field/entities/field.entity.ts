@@ -17,6 +17,24 @@ import FieldConstants from '../../../FarmServiceTypes/Field/Constants';
 
 @Entity()
 export class Field extends BaseEntity {
+  constructor(options?: {
+    polishSystemId: string;
+    area: number;
+    dateOfCollectionData: Date;
+    address: Promise<FieldAddress>;
+    owner: Promise<User>;
+    appearsInOrders?: Promise<Order[] | undefined>;
+  }) {
+    super();
+    if (options) {
+      this.polishSystemId = options.polishSystemId;
+      this.area = options.area;
+      this.dateOfCollectionData = options.dateOfCollectionData;
+      this.address = options.address;
+      this.owner = options.owner;
+      this.appearsInOrders = options.appearsInOrders;
+    }
+  }
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

@@ -3,32 +3,23 @@ import { Order } from '../entities/order.entity';
 import {
   IsDateString,
   IsEnum,
-  IsNumber,
   IsOptional,
   IsString,
   IsUUID,
   Length,
-  Max,
-  Min,
 } from 'class-validator';
 import OrderConstants from '../../../FarmServiceTypes/Order/Constants';
-import {
-  OrderStatus,
-  ServiceType,
-} from '../../../FarmServiceTypes/Order/Enums';
+import { ServiceType } from '../../../FarmServiceTypes/Order/Enums';
 import { getDateFormatDescriptionFor } from '../../../Helpers/common descriptionGetters';
 import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReject.decorator';
 import { User } from '../../user/entities/user.entity';
 
 export class CreateOrderDto
-  implements OmitBaseEntityAndId<Order, 'client' | 'totalArea'>
+  implements OmitBaseEntityAndId<Order, 'client' | 'totalArea' | 'company'>
 {
   @IsString({ message: 'Order name must be an string' })
   @Length(OrderConstants.NAME_MIN_LEN, OrderConstants.NAME_MAX_LEN)
   name: string;
-
-  @IsEnum(OrderStatus)
-  status: OrderStatus;
 
   @IsEnum(ServiceType)
   serviceType: ServiceType;
@@ -46,12 +37,15 @@ export class CreateOrderDto
   )
   additionalInfo: string;
 
-  @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(OrderConstants.MIN_PRICE_PER_UNIT)
-  @Max(OrderConstants.MAX_PRICE_PER_UNIT)
-  pricePerUnit: number;
-
   @IsUUID()
-  @FindOrReject(User, { message: 'Cannot find user with given id' })
-  client: string;
+  @FindOrReject(User, { message: 'Cannot find client with given id' })
+  client: User;
+
+  *[Symbol.iterator]() {
+    yield this.name;
+    yield this.serviceType;
+    yield this.performanceDate;
+    yield this.additionalInfo;
+    yield this.client;
+  }
 }

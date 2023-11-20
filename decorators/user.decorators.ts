@@ -31,7 +31,6 @@ export const GetOwnedCompany = createParamDecorator(
       throw new InternalServerErrorException(undefined, 'Something went wrong');
     }
     const company = await user.company;
-    console.log(company, 'test');
     if (!company?.active)
       throw new ConflictException("Causer don't have company");
     return company;

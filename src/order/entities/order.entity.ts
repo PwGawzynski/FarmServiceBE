@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   Entity,
   JoinColumn,
@@ -15,9 +16,39 @@ import { User } from '../../user/entities/user.entity';
 import { Field } from '../../field/entities/field.entity';
 import { Task } from '../../task/entities/task.entity';
 import OrderConstants from '../../../FarmServiceTypes/Order/Constants';
+import { Company } from '../../company/entities/company.entity';
 
 @Entity()
-export class Order {
+export class Order extends BaseEntity {
+  constructor(options?: {
+    name: string;
+    serviceType: ServiceType;
+    performanceDate: Date;
+    client: Promise<User>;
+    company: Promise<Company>;
+    status?: OrderStatus;
+    additionalInfo?: string;
+    pricePerUnit?: number;
+    openedAt?: Date;
+    createdAt?: Date;
+    fields?: Promise<Field[] | undefined>;
+  }) {
+    super();
+    if (options) {
+      this.name = options.name;
+      this.serviceType = options.serviceType;
+      this.performanceDate = options.performanceDate;
+      this.client = options.client;
+      this.company = options.company;
+      this.status = options.status;
+      this.additionalInfo = options.additionalInfo;
+      this.pricePerUnit = options.pricePerUnit;
+      this.openedAt = options.openedAt;
+      this.createdAt = options.createdAt;
+      this.fields = options.fields;
+    }
+  }
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -80,7 +111,7 @@ export class Order {
     query: (alias) =>
       `SELECT SUM("area") FROM "field" WHERE "field"."id" = ${alias}.id `,
   })
-  totalArea: string;
+  totalArea?: string;
 
   @Column({
     type: 'numeric',
@@ -94,7 +125,11 @@ export class Order {
   @ManyToOne(() => User, (user) => user.orders, { nullable: false })
   client: Promise<User>;
 
+  @ManyToOne(() => Company, (company) => company.orders, {
+    nullable: false,
+  })
+  company: Promise<Company>;
+
   @OneToMany(() => Task, (task) => task.order, { nullable: true })
-  @JoinColumn()
   fields?: Promise<Field[] | undefined>;
 }

@@ -19,6 +19,7 @@ import { getDateFormatDescriptionFor } from '../../../Helpers/common description
 import FieldConstants from '../../../FarmServiceTypes/Field/Constants';
 import { CreateFieldAddressDto } from '../../field-address/dto/create-field-address.dto';
 
+// TODO change to create only by latitude and longitude
 export class CreateFieldDto
   implements
     OmitBaseEntityAndId<Field, 'address' | 'appearsInOrders' | 'owner'>

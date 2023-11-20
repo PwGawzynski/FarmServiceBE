@@ -25,7 +25,8 @@ export class FieldService {
     filedAddress.field = Promise.resolve(newField);
     filedAddress.save();
 
-    // TODO change to return field.response.dto
+    // to prevent maximum call stack (circular dep. field.fieldAddress <-> fieldAddress.field )
+    newField.address = undefined;
     return {
       code: ResponseCode.ProcessedWithoutConfirmationWaiting,
       payload: {

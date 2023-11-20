@@ -8,20 +8,18 @@ import {
   IsNumber,
   IsPositive,
   IsString,
-  IsUUID,
   Length,
   Matches,
   Max,
   Min,
   ValidateNested,
 } from 'class-validator';
-import { CreateAddressDto } from '../../commonEntities/dto/create-address.dto';
 import { Type } from 'class-transformer';
-import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReject.decorator';
-import { User } from '../../user/entities/user.entity';
 import { getDateFormatDescriptionFor } from '../../../Helpers/common descriptionGetters';
 import FieldConstants from '../../../FarmServiceTypes/Field/Constants';
+import { CreateFieldAddressDto } from '../../field-address/dto/create-field-address.dto';
 
+// TODO change to create only by latitude and longitude
 export class CreateFieldDto
   implements
     OmitBaseEntityAndId<Field, 'address' | 'appearsInOrders' | 'owner'>
@@ -56,11 +54,20 @@ export class CreateFieldDto
     { message: 'Address cannot be empty object' },
   )
   @IsDefined()
-  @Type(() => CreateAddressDto)
+  @Type(() => CreateFieldAddressDto)
   @ValidateNested()
-  address: CreateAddressDto;
+  address: CreateFieldAddressDto;
 
+  // TODO this will be used when company owner adds fields
+  /*@IsOptional()
   @IsUUID()
   @FindOrReject(User, { message: 'Cannot find given Owner' })
-  owner_id: string;
+  owner_id?: Promise<User> | undefined;*/
+
+  *[Symbol.iterator]() {
+    yield this.polishSystemId;
+    yield this.area;
+    yield this.dateOfCollectionData;
+    yield this.address;
+  }
 }

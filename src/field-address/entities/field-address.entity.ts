@@ -12,6 +12,27 @@ import FieldAddressConstants from '../../../FarmServiceTypes/FiledAddress/Consta
 
 @Entity()
 export class FieldAddress extends BaseEntity {
+  constructor(options?: {
+    city: string;
+    county: string;
+    postalCode: string;
+    latitude: string;
+    longitude: string;
+    voivodeship: string;
+    field?: Promise<Field>;
+  }) {
+    super();
+    if (options) {
+      this.city = options.city;
+      this.county = options.county;
+      this.voivodeship = options.voivodeship;
+      this.latitude = options.latitude;
+      this.longitude = options.longitude;
+      this.postalCode = options.postalCode;
+      this.field = options.field;
+    }
+  }
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -57,8 +78,8 @@ export class FieldAddress extends BaseEntity {
   })
   longitude: string;
 
-  @OneToOne(() => Field, (field) => field.address)
+  @OneToOne(() => Field, (field) => field.address, { nullable: true })
   @JoinColumn()
   @Index('UNIQ_FIELD', { unique: true })
-  field: Promise<Field>;
+  field?: Promise<Field>;
 }

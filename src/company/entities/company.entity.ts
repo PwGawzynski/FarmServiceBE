@@ -13,6 +13,7 @@ import { Worker } from '../../worker/entities/worker.entity';
 import CompanyConstants from '../../../FarmServiceTypes/Company/Constants';
 import { CompanyAddress } from '../../company-address/entities/company-address.entity';
 import { ConflictException } from '@nestjs/common';
+import { Order } from '../../order/entities/order.entity';
 
 @Entity()
 export class Company extends BaseEntity {
@@ -20,7 +21,7 @@ export class Company extends BaseEntity {
     name: string;
     address: Promise<CompanyAddress>;
     owner: Promise<User | undefined>;
-    workers: Promise<Array<Worker> | undefined>;
+    workers?: Promise<Array<Worker> | undefined>;
   }) {
     super();
     if (options) {
@@ -31,7 +32,7 @@ export class Company extends BaseEntity {
     }
   }
 
-  private readonly CAUSER_HAS_COMPANY =
+  private static readonly CAUSER_HAS_COMPANY =
     'Causer Already has Company assigned to Account';
 
   @PrimaryGeneratedColumn('uuid')
@@ -56,6 +57,12 @@ export class Company extends BaseEntity {
   @OneToMany(() => Worker, (worker) => worker.company, { nullable: true })
   workers?: Promise<Array<Worker> | undefined>;
 
+  @OneToMany(() => Order, (Order) => Order.company, { nullable: true })
+  orders?: Promise<Array<Order> | undefined>;
+
+  @OneToMany(() => User, (client) => client.company)
+  clients?: Promise<User> | undefined;
+
   @Column({
     type: 'boolean',
     default: true,
@@ -71,6 +78,6 @@ export class Company extends BaseEntity {
         active: true,
       },
     });
-    if (exist) throw new ConflictException(this.CAUSER_HAS_COMPANY);
+    if (exist) throw new ConflictException(Company.CAUSER_HAS_COMPANY);
   }
 }

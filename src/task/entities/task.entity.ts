@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Order } from '../../order/entities/order.entity';
 import { Field } from '../../field/entities/field.entity';
+import { Worker } from '../../worker/entities/worker.entity';
 
 @Entity()
 export class Task {
@@ -36,11 +37,15 @@ export class Task {
   })
   closedAt?: Date;
 
-  @ManyToOne(() => Order, (order) => order.fields)
+  @ManyToOne(() => Order, (order) => order.tasks)
   @JoinColumn({ name: 'order_id' })
   order: Promise<Order>;
 
-  @ManyToOne(() => Field, (field) => field.appearsInOrders)
-  @JoinColumn({ name: 'Field_id' })
+  @ManyToOne(() => Worker, (worker) => worker.tasks)
+  @JoinColumn({ name: 'worker_id' })
+  worker: Promise<Worker>;
+
+  @ManyToOne(() => Field, (field) => field.tasks)
+  @JoinColumn({ name: 'field_id' })
   field: Promise<Field>;
 }

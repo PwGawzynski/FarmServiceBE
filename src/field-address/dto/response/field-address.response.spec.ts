@@ -5,7 +5,7 @@ import { FieldAddressResponseBase } from '../../../../FarmServiceTypes/FiledAddr
 const test: Equal<FieldAddressResponseWhiteList, FieldAddressResponseBase> =
   true;
 
-describe('Are FieldAddressResponseWhiteList math FieldAddressResponseBase', () => {
+describe('Does FieldAddressResponseWhiteList math FieldAddressResponseBase', () => {
   it('should be true', () => {
     expect(test).toBe(true);
   });

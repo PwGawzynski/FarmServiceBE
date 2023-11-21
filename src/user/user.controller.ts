@@ -13,7 +13,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { Request } from 'express';
 import { User } from './entities/user.entity';
 import { GetUser } from '../../decorators/user.decorators';
-import { AllowOnlyByToken, Public } from '../../decorators/auth.decorators';
+import {
+  AllowOnlyByToken,
+  Public,
+  Worker,
+} from '../../decorators/auth.decorators';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('User')
@@ -44,5 +48,11 @@ export class UserController {
   @Get('me')
   async getUserByToken(@GetUser() user: User) {
     return this.userService.getUserAccountData(user);
+  }
+
+  @Get('id')
+  @Worker()
+  async getId(@GetUser() user: User) {
+    return this.userService.getId(user);
   }
 }

@@ -1,6 +1,5 @@
 import { UserRole } from '../../../../FarmServiceTypes/User/Enums';
 import { Exclude, Expose } from 'class-transformer';
-import { PartialType } from '@nestjs/mapped-types';
 
 export class UserResponseWhiteListDto {
   constructor(partial: Partial<UserResponseWhiteListDto>) {

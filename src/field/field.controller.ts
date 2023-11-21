@@ -1,8 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { FieldService } from './field.service';
 import { AllRoles, Owner } from '../../decorators/auth.decorators';
-import { GetOwnedCompany, GetUser } from '../../decorators/user.decorators';
-import { User } from '../user/entities/user.entity';
+import { GetOwnedCompany } from '../../decorators/user.decorators';
 import { CreateFieldDto } from './dto/create-field.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Company } from '../company/entities/company.entity';

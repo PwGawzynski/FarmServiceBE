@@ -1,5 +1,6 @@
 import { UserRole } from '../../../../FarmServiceTypes/User/Enums';
 import { Exclude, Expose } from 'class-transformer';
+import { PartialType } from '@nestjs/mapped-types';
 
 export class UserResponseWhiteListDto {
   constructor(partial: Partial<UserResponseWhiteListDto>) {
@@ -23,4 +24,13 @@ export class UserResponseDto extends UserResponseWhiteListDto {
     super(partial);
     Object.assign(this, partial);
   }
+}
+
+@Exclude()
+export class WorkerIdResponseDto {
+  constructor(partial: Partial<WorkerIdResponseDto>) {
+    Object.assign(this, partial);
+  }
+  @Expose()
+  id: string;
 }

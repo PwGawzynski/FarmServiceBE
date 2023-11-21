@@ -3,7 +3,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { User } from '../user/entities/user.entity';
 import { CreateFieldDto } from './dto/create-field.dto';
 import { Field } from './entities/field.entity';
 import { FieldAddress } from '../field-address/entities/field-address.entity';

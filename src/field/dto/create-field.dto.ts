@@ -8,6 +8,7 @@ import {
   IsNumber,
   IsPositive,
   IsString,
+  IsUUID,
   Length,
   Matches,
   Max,
@@ -18,11 +19,12 @@ import { Type } from 'class-transformer';
 import { getDateFormatDescriptionFor } from '../../../Helpers/common descriptionGetters';
 import FieldConstants from '../../../FarmServiceTypes/Field/Constants';
 import { CreateFieldAddressDto } from '../../field-address/dto/create-field-address.dto';
+import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReject.decorator';
+import { Order } from '../../order/entities/order.entity';
 
 // TODO change to create only by latitude and longitude
 export class CreateFieldDto
-  implements
-    OmitBaseEntityAndId<Field, 'address' | 'appearsInOrders' | 'owner'>
+  implements OmitBaseEntityAndId<Field, 'address' | 'order'>
 {
   @IsString({ message: 'Polish system id must be a string' })
   @Length(FieldConstants.POLISH_ID_MIN_LEN, FieldConstants.POLISH_ID_MAX_LEN)
@@ -58,16 +60,15 @@ export class CreateFieldDto
   @ValidateNested()
   address: CreateFieldAddressDto;
 
-  // TODO this will be used when company owner adds fields
-  /*@IsOptional()
   @IsUUID()
-  @FindOrReject(User, { message: 'Cannot find given Owner' })
-  owner_id?: Promise<User> | undefined;*/
+  @FindOrReject(Order, { message: 'Cannot find given order' })
+  order: Order;
 
   *[Symbol.iterator]() {
     yield this.polishSystemId;
     yield this.area;
     yield this.dateOfCollectionData;
     yield this.address;
+    yield this.order;
   }
 }

@@ -9,6 +9,8 @@ export class OrderResponseWhiteList {
     Object.assign(this, partial);
   }
   @Expose()
+  id: string;
+  @Expose()
   name: string;
   @Expose()
   status: OrderStatus;
@@ -26,8 +28,6 @@ export class OrderResponseWhiteList {
   additionalInfo: string;
   @Expose()
   pricePerUnit?: number;
-  @Expose()
-  clientId: string;
 }
 
 @Exclude()

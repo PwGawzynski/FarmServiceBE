@@ -5,17 +5,13 @@ import {
   IsEnum,
   IsOptional,
   IsString,
-  IsUUID,
   Length,
 } from 'class-validator';
 import OrderConstants from '../../../FarmServiceTypes/Order/Constants';
 import { ServiceType } from '../../../FarmServiceTypes/Order/Enums';
 import { getDateFormatDescriptionFor } from '../../../Helpers/common descriptionGetters';
-import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReject.decorator';
-import { User } from '../../user/entities/user.entity';
-
 export class CreateOrderDto
-  implements OmitBaseEntityAndId<Order, 'client' | 'totalArea' | 'company'>
+  implements OmitBaseEntityAndId<Order, 'totalArea' | 'company'>
 {
   @IsString({ message: 'Order name must be an string' })
   @Length(OrderConstants.NAME_MIN_LEN, OrderConstants.NAME_MAX_LEN)
@@ -37,15 +33,10 @@ export class CreateOrderDto
   )
   additionalInfo: string;
 
-  @IsUUID()
-  @FindOrReject(User, { message: 'Cannot find client with given id' })
-  client: User;
-
   *[Symbol.iterator]() {
     yield this.name;
     yield this.serviceType;
     yield this.performanceDate;
     yield this.additionalInfo;
-    yield this.client;
   }
 }

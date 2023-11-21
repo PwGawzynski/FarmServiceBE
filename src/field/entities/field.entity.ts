@@ -10,29 +10,26 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { FieldAddress } from '../../field-address/entities/field-address.entity';
-import { User } from '../../user/entities/user.entity';
 import { Order } from '../../order/entities/order.entity';
-import { Task } from '../../task/entities/task.entity';
 import FieldConstants from '../../../FarmServiceTypes/Field/Constants';
+import { Task } from '../../task/entities/task.entity';
 
 @Entity()
 export class Field extends BaseEntity {
   constructor(options?: {
     polishSystemId: string;
+    order: Promise<Order>;
     area: number;
     dateOfCollectionData: Date;
     address: Promise<FieldAddress>;
-    owner: Promise<User>;
-    appearsInOrders?: Promise<Order[] | undefined>;
   }) {
     super();
     if (options) {
+      this.order = options.order;
       this.polishSystemId = options.polishSystemId;
       this.area = options.area;
       this.dateOfCollectionData = options.dateOfCollectionData;
       this.address = options.address;
-      this.owner = options.owner;
-      this.appearsInOrders = options.appearsInOrders;
     }
   }
   @PrimaryGeneratedColumn('uuid')
@@ -71,11 +68,9 @@ export class Field extends BaseEntity {
   @Index('UNIQ_ADDRESS', { unique: true })
   address: Promise<FieldAddress>;
 
-  @ManyToOne(() => User, (user) => user.fields)
-  @JoinColumn({ name: 'owner_id' })
-  owner: Promise<User>;
+  @ManyToOne(() => Order, (order) => order.fields, { nullable: false })
+  order: Promise<Order | undefined>;
 
-  @OneToMany(() => Task, (task) => task.field, { nullable: true })
-  @JoinColumn({ name: 'appears_in_orders' })
-  appearsInOrders?: Promise<Order[] | undefined>;
+  @OneToMany(() => Task, (tasks) => tasks.field, { nullable: true })
+  tasks?: Promise<Task[]>;
 }

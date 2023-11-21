@@ -5,7 +5,6 @@ import {
   Index,
   JoinColumn,
   ManyToMany,
-  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -13,11 +12,9 @@ import {
 import { Account } from './account.entity';
 import { UserPersonalData } from './userPersonalData.entity';
 import { Address } from '../../commonEntities/address.entity';
-import { Field } from '../../field/entities/field.entity';
 import { Notification } from '../../notifications/entities/notification.entity';
 import { Company } from '../../company/entities/company.entity';
 import { Worker } from '../../worker/entities/worker.entity';
-import { Order } from '../../order/entities/order.entity';
 import { UserRole } from '../../../FarmServiceTypes/User/Enums';
 
 /**
@@ -75,9 +72,9 @@ export class User extends BaseEntity {
   })
   address: Promise<Address>;
 
-  @OneToMany(() => Field, (field) => field.owner)
+  /*@OneToMany(() => Field, (field) => field.owner)
   @JoinColumn({ name: 'owned_fields' })
-  fields: Promise<Field[]>;
+  fields: Promise<Field[]>;*/
 
   @OneToMany(() => Notification, (notification) => notification.causer)
   @JoinColumn({ name: 'caused_notifications' })
@@ -94,10 +91,6 @@ export class User extends BaseEntity {
   @JoinColumn()
   company?: Promise<Company | undefined>;
 
-  @ManyToOne(() => Company, (company) => company.clients, { nullable: true })
-  @JoinColumn({ name: 'client_at' })
-  clientAt: Promise<Company>;
-
   @OneToOne(() => Worker, (worker) => worker.user, {
     nullable: true,
     onDelete: 'CASCADE',
@@ -105,7 +98,4 @@ export class User extends BaseEntity {
   @Index('UNIQ_WORKER', { unique: true })
   @JoinColumn()
   worker?: Promise<Worker | undefined>;
-
-  @OneToMany(() => Order, (order) => order.client, { nullable: true })
-  orders?: Promise<Order[] | undefined>;
 }

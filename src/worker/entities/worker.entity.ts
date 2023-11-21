@@ -3,11 +3,13 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { Company } from '../../company/entities/company.entity';
+import { Task } from '../../task/entities/task.entity';
 
 @Entity()
 export class Worker {
@@ -24,4 +26,7 @@ export class Worker {
   @ManyToOne(() => Company, (company) => company.workers, { nullable: false })
   @JoinColumn()
   company: Promise<Company>;
+
+  @OneToMany(() => Task, (task) => task.worker, { nullable: true })
+  tasks?: Promise<Task[]>;
 }

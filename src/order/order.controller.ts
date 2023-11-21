@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { ApiTags } from '@nestjs/swagger';
 import { Owner } from '../../decorators/auth.decorators';
@@ -18,5 +18,11 @@ export class OrderController {
     @GetOwnedCompany() company: Company,
   ) {
     return this.orderService.create(createOrderDto, company);
+  }
+
+  @Get('all')
+  @Owner()
+  async getAll(@GetOwnedCompany() company: Company) {
+    return this.orderService.getAll(company);
   }
 }

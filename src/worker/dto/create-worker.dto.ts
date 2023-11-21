@@ -6,7 +6,7 @@ import { Company } from '../../company/entities/company.entity';
 import { User } from '../../user/entities/user.entity';
 
 export class CreateWorkerDto
-  implements OmitBaseEntityAndId<Worker, 'company' | 'user'>
+  implements OmitBaseEntityAndId<Worker, 'company' | 'user' | 'tasks'>
 {
   @IsUUID()
   @FindOrReject(Company, { message: 'Cannot find company with given id' })

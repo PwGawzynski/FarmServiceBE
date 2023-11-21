@@ -60,9 +60,6 @@ export class Company extends BaseEntity {
   @OneToMany(() => Order, (Order) => Order.company, { nullable: true })
   orders?: Promise<Array<Order> | undefined>;
 
-  @OneToMany(() => User, (client) => client.company)
-  clients?: Promise<User> | undefined;
-
   @Column({
     type: 'boolean',
     default: true,

@@ -16,9 +16,6 @@ export class FieldResponseWhiteList {
 
   @Expose()
   addressId: string;
-
-  @Expose()
-  owner_id: string;
 }
 
 @Exclude()

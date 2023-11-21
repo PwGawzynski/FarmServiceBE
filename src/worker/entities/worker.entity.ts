@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Entity,
   Index,
   JoinColumn,
@@ -10,9 +11,23 @@ import {
 import { User } from '../../user/entities/user.entity';
 import { Company } from '../../company/entities/company.entity';
 import { Task } from '../../task/entities/task.entity';
+import { ConflictException } from '@nestjs/common';
 
 @Entity()
-export class Worker {
+export class Worker extends BaseEntity {
+  constructor(options?: {
+    user: Promise<User>;
+    company: Promise<Company>;
+    tasks?: Promise<Task[]>;
+  }) {
+    super();
+    if (options) {
+      this.user = options.user;
+      this.company = options.company;
+      this.tasks = options.tasks;
+    }
+  }
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -29,4 +44,16 @@ export class Worker {
 
   @OneToMany(() => Task, (task) => task.worker, { nullable: true })
   tasks?: Promise<Task[]>;
+
+  async _shouldNotExist() {
+    const exist = await Worker.findOne({
+      where: {
+        user: {
+          id: (await this.user).id,
+        },
+      },
+    });
+    if (exist)
+      throw new ConflictException('Given user is already registered as worker');
+  }
 }

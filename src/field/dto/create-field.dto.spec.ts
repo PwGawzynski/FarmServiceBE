@@ -3,8 +3,8 @@ import { CreateFieldDto } from './create-field.dto';
 import { CreateFieldReqI } from '../../../FarmServiceTypes/Field/Requests';
 
 const test: Equal<
-  Omit<CreateFieldDto, 'address' | keyof { [Symbol.iterator]: any }>,
-  Omit<CreateFieldReqI, 'address' | 'owner_id'>
+  Omit<CreateFieldDto, 'address' | 'order' | keyof { [Symbol.iterator]: any }>,
+  Omit<CreateFieldReqI, 'address' | 'order'>
 > = true;
 
 describe('Does CreateFieldDto match CreateFieldReqI', () => {

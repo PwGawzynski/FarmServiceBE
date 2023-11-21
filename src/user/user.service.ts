@@ -15,7 +15,10 @@ import {
   ErrorCodes,
   ErrorPayloadObject,
 } from '../../FarmServiceTypes/respnse/errorPayloadObject';
-import { UserResponseDto } from './dto/response/user.response.dto';
+import {
+  UserResponseDto,
+  WorkerIdResponseDto,
+} from './dto/response/user.response.dto';
 
 interface DataFromReq {
   userLogin: string;
@@ -190,5 +193,12 @@ export class UserService {
       code: ResponseCode.ProcessedCorrect,
       payload: await this._returnUser(user),
     } as ResponseObject<UserResponseDto>;
+  }
+
+  async getId(user: User) {
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: new WorkerIdResponseDto(user),
+    } as ResponseObject<WorkerIdResponseDto>;
   }
 }

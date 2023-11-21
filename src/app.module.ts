@@ -18,10 +18,10 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { CompanyModule } from './company/company.module';
 import { WorkerModule } from './worker/worker.module';
 import { OrderModule } from './order/order.module';
-import { TaskModule } from './task/task.module';
 import { RolesGuard } from '../Guards/RoleGuard';
 import { JwtAuthGuard } from './auth/jwt-auth.guards';
 import { CompanyAddressModule } from './company-address/company-address.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -54,11 +54,11 @@ import { CompanyAddressModule } from './company-address/company-address.module';
     }),
     FieldAddressModule,
     FieldModule,
+    TaskModule,
     NotificationsModule,
     CompanyModule,
     WorkerModule,
     OrderModule,
-    TaskModule,
     CompanyAddressModule,
   ],
   controllers: [AppController],

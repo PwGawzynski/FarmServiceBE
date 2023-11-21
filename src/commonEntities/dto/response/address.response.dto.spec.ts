@@ -6,7 +6,7 @@ import { AddressResponseBase } from '../../../../FarmServiceTypes/Address/Resspo
 
 const test: Equal<AddressWhiteList, AddressResponseBase> = true;
 
-describe('Are AddressResponseBase match whitelist DTO', () => {
+describe('Does AddressResponseBase match whitelist DTO', () => {
   it('should be true', () => {
     expect(test).toBe(true);
   });

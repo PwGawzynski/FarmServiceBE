@@ -14,11 +14,8 @@ export class FieldController {
 
   @Post()
   @Owner()
-  async createByOwner(
-    @Body() createFieldDto: CreateFieldDto,
-    @GetUser() user: User,
-  ) {
-    return this.fieldService.createByOwner(createFieldDto, user);
+  async createByOwner(@Body() createFieldDto: CreateFieldDto) {
+    return this.fieldService.createByOwner(createFieldDto);
   }
 
   @Get()

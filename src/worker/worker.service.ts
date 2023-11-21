@@ -6,6 +6,7 @@ import {
   ResponseCode,
   ResponseObject,
 } from '../../FarmServiceTypes/respnse/responseGeneric';
+import { WorkerResponseDto } from './dto/response/worker-response.dto';
 
 @Injectable()
 export class WorkerService {
@@ -15,7 +16,13 @@ export class WorkerService {
       user: Promise.resolve(createWorkerDto.user),
     });
     await newWorker._shouldNotExist();
+    console.log('WORKER_ID_ASK');
     newWorker.save();
-    return { code: ResponseCode.ProcessedCorrect } as ResponseObject;
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: new WorkerResponseDto({
+        personalData: await (await newWorker.user).personalData,
+      }),
+    } as ResponseObject<WorkerResponseDto>;
   }
 }

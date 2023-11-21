@@ -16,7 +16,7 @@ import { Company } from '../company/entities/company.entity';
 
 @Injectable()
 export class FieldService {
-  async createByOwner(createFieldDto: CreateFieldDto, user: User) {
+  async createByOwner(createFieldDto: CreateFieldDto) {
     const filedAddress = new FieldAddress({ ...createFieldDto.address });
     const newField = new Field({
       ...createFieldDto,

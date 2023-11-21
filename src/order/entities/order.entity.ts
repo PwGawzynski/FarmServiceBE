@@ -11,11 +11,10 @@ import {
   OrderStatus,
   ServiceType,
 } from '../../../FarmServiceTypes/Order/Enums';
-import { User } from '../../user/entities/user.entity';
 import { Field } from '../../field/entities/field.entity';
-import { Task } from '../../task/entities/task.entity';
 import OrderConstants from '../../../FarmServiceTypes/Order/Constants';
 import { Company } from '../../company/entities/company.entity';
+import { Task } from '../../task/entities/task.entity';
 
 @Entity()
 export class Order extends BaseEntity {
@@ -23,7 +22,6 @@ export class Order extends BaseEntity {
     name: string;
     serviceType: ServiceType;
     performanceDate: Date;
-    client: Promise<User>;
     company: Promise<Company>;
     status?: OrderStatus;
     additionalInfo?: string;
@@ -31,25 +29,26 @@ export class Order extends BaseEntity {
     openedAt?: Date;
     createdAt?: Date;
     fields?: Promise<Field[] | undefined>;
+    id?: string;
   }) {
     super();
     if (options) {
+      this.id = options.id;
       this.name = options.name;
       this.serviceType = options.serviceType;
       this.performanceDate = options.performanceDate;
-      this.client = options.client;
-      this.company = options.company;
       this.status = options.status;
       this.additionalInfo = options.additionalInfo;
       this.pricePerUnit = options.pricePerUnit;
       this.openedAt = options.openedAt;
       this.createdAt = options.createdAt;
       this.fields = options.fields;
+      this.company = options.company;
     }
   }
 
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id?: string;
 
   @Column({
     type: 'varchar',
@@ -108,7 +107,7 @@ export class Order extends BaseEntity {
   @VirtualColumn({
     type: 'mediumint',
     query: (alias) =>
-      `SELECT SUM("area") FROM "field" WHERE "field"."id" = ${alias}.id `,
+      `SELECT SUM(area) FROM field WHERE field.orderId = ${alias}.id `,
   })
   totalArea?: string;
 
@@ -121,14 +120,14 @@ export class Order extends BaseEntity {
   })
   pricePerUnit?: number;
 
-  @ManyToOne(() => User, (user) => user.orders, { nullable: false })
-  client: Promise<User>;
-
   @ManyToOne(() => Company, (company) => company.orders, {
     nullable: false,
   })
   company: Promise<Company>;
 
-  @OneToMany(() => Task, (task) => task.order, { nullable: true })
+  @OneToMany(() => Field, (field) => field.order, { nullable: true })
   fields?: Promise<Field[] | undefined>;
+
+  @OneToMany(() => Task, (task) => task.order, { nullable: true })
+  tasks?: Promise<Task[]>;
 }

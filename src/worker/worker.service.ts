@@ -7,6 +7,7 @@ import {
   ResponseObject,
 } from '../../FarmServiceTypes/respnse/responseGeneric';
 import { WorkerResponseDto } from './dto/response/worker-response.dto';
+import { concatMap, filter, interval, take } from 'rxjs';
 
 @Injectable()
 export class WorkerService {
@@ -24,5 +25,25 @@ export class WorkerService {
         personalData: await (await newWorker.user).personalData,
       }),
     } as ResponseObject<WorkerResponseDto>;
+  }
+
+  isAssigned(id: string) {
+    return interval(2000).pipe(
+      concatMap(async () => {
+        const worker = await Worker.findOne({ where: { user: { id } } });
+        if (worker) {
+          await worker.user;
+          console.log(worker, 'RES');
+          return {
+            data: JSON.stringify(await (await worker.user).personalData),
+          };
+        }
+        return {
+          data: undefined,
+        };
+      }),
+      filter((result) => result.data !== undefined),
+      take(1),
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post, Sse } from '@nestjs/common';
 import { WorkerService } from './worker.service';
 import { ApiTags } from '@nestjs/swagger';
 import { Owner } from '../../decorators/auth.decorators';
@@ -18,5 +18,10 @@ export class WorkerController {
     @GetOwnedCompany() company: Company,
   ) {
     return this.workerService.create(createWorkerDto, company);
+  }
+
+  @Sse('sse/:id')
+  isAssigned(@Param('id') id: string) {
+    return this.workerService.isAssigned(id);
   }
 }

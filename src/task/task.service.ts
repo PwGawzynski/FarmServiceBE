@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CrateTaskCollection, CreateTaskDto } from './dto/create-task.dto';
+import { CrateTaskCollection } from './dto/create-task.dto';
 import { Task } from './entities/task.entity';
 import { Company } from '../company/entities/company.entity';
 import {

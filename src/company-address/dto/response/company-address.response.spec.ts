@@ -5,7 +5,7 @@ import { Equal } from '../../../../TypeScriptHelpers/dtoToInterface';
 const test: Equal<CompanyAddressResponseWhiteList, CompanyAddressResponseBase> =
   true;
 
-describe('Are CompanyAddressResponseWhiteList match CompanyAddressResponseBase', () => {
+describe('Does CompanyAddressResponseWhiteList match CompanyAddressResponseBase', () => {
   it('should be true', () => {
     expect(test).toBe(true);
   });

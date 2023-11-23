@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { Owner } from '../../decorators/auth.decorators';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -31,5 +31,11 @@ export class CompanyController {
   @Owner()
   async delete(@GetOwnedCompany() company: Company, @GetUser() user: User) {
     return this.companyService.delete(company, user);
+  }
+
+  @Get('workers')
+  @Owner()
+  async getCompanyWorkers(@GetOwnedCompany() company: Company) {
+    return this.companyService.getCompanyWorkers(company);
   }
 }

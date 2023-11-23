@@ -4,7 +4,7 @@ import { CreateNotificationReqI } from '../../../FarmServiceTypes/Notification/R
 
 const test: Equal<CreateNotificationDto, CreateNotificationReqI> = true;
 
-describe('Are CreateNotificationReqI matches CreateNotificationDto', () => {
+describe('Does CreateNotificationReqI matches CreateNotificationDto', () => {
   it('should be equal', () => {
     expect(test).toBe(true);
   });

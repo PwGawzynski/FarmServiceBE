@@ -8,6 +8,7 @@ import {
   ResponseObject,
 } from '../../FarmServiceTypes/respnse/responseGeneric';
 import { CompanyResponseDto } from './dto/response/company.response.dto';
+import { WorkerResponseDto } from '../worker/dto/response/worker-response.dto';
 
 @Injectable()
 export class CompanyService {
@@ -63,5 +64,16 @@ export class CompanyService {
     return {
       code: ResponseCode.ProcessedWithoutConfirmationWaiting,
     } as ResponseObject;
+  }
+
+  async getCompanyWorkers(company: Company) {
+    return Promise.all(
+      (await company.workers).map(
+        async (worker) =>
+          new WorkerResponseDto({
+            personalData: await (await worker.user).personalData,
+          }),
+      ),
+    );
   }
 }

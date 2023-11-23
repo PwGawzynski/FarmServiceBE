@@ -4,7 +4,7 @@ import { CreatUserPersonalDataReqI } from '../../../FarmServiceTypes/UserPersona
 
 const test: Equal<CreateUserPersonalDataDto, CreatUserPersonalDataReqI> = true;
 
-describe('Are CreateUserPersonalDataDto  match CreatUserPersonalDataReqI', () => {
+describe('Does CreateUserPersonalDataDto  match CreatUserPersonalDataReqI', () => {
   it('should be true', () => {
     expect(test).toBe(true);
   });

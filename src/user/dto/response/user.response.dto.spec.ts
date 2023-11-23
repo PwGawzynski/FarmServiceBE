@@ -1,6 +1,9 @@
 import { Equal } from '../../../../TypeScriptHelpers/dtoToInterface';
-import { UserResponseDto } from './user.response.dto';
-import { UserResponseBase } from '../../../../FarmServiceTypes/User/Responses';
+import { UserResponseDto, WorkerIdResponseDto } from './user.response.dto';
+import {
+  UserResponseBase,
+  WorkerIdResponseI,
+} from '../../../../FarmServiceTypes/User/Responses';
 
 const test: Equal<
   Omit<UserResponseDto, 'personalData' | 'address' | 'account'>,
@@ -10,5 +13,13 @@ const test: Equal<
 describe('Dose UserResponseDto match UserResponseBase', () => {
   it('should be tru', () => {
     expect(test).toBe(true);
+  });
+});
+
+const testWorkerIdResponse: Equal<WorkerIdResponseDto, WorkerIdResponseI> =
+  true;
+describe('Does WorkerIdResponseDto match WorkerIdResponseI', () => {
+  it('should be true', () => {
+    expect(testWorkerIdResponse).toBe(true);
   });
 });

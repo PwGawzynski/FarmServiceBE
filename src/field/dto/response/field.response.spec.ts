@@ -7,7 +7,7 @@ const test: Equal<
   Omit<FiledResponseBase, 'address'>
 > = true;
 
-describe('Are FieldResponseWhiteList  match FiledResponseBase', () => {
+describe('Does FieldResponseWhiteList  match FiledResponseBase', () => {
   it('should be true', () => {
     expect(test).toBe(true);
   });

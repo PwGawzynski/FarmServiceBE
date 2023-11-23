@@ -8,6 +8,6 @@ import { AccountResponseBase } from '../../../../FarmServiceTypes/Account/Resspo
  */
 const test: Equal<AccountWhiteList, AccountResponseBase> = true;
 
-describe('Are AccountResponseBase whitelist match DTO', () => {
+describe('Does AccountResponseBase whitelist match DTO', () => {
   it('should be true', () => expect(test).toBe(true));
 });

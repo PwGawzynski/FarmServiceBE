@@ -6,8 +6,12 @@ import {
   ResponseCode,
   ResponseObject,
 } from '../../FarmServiceTypes/respnse/responseGeneric';
-import { WorkerResponseDto } from './dto/response/worker-response.dto';
+import {
+  WorkerIdResponseDto,
+  WorkerResponseDto,
+} from './dto/response/worker-response.dto';
 import { concatMap, filter, interval, take } from 'rxjs';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class WorkerService {
@@ -18,13 +22,25 @@ export class WorkerService {
     });
     await newWorker._shouldNotExist();
     console.log('WORKER_ID_ASK');
-    newWorker.save();
+    await newWorker.save();
+    (await newWorker.user).worker = Promise.resolve(newWorker);
+    (await newWorker.user).save();
     return {
       code: ResponseCode.ProcessedCorrect,
       payload: new WorkerResponseDto({
         personalData: await (await newWorker.user).personalData,
       }),
     } as ResponseObject<WorkerResponseDto>;
+  }
+
+  async getId(user: User) {
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: new WorkerIdResponseDto({
+        id: user.id,
+        companyId: (await (await user.worker)?.company)?.id,
+      }),
+    } as ResponseObject<WorkerIdResponseDto>;
   }
 
   isAssigned(id: string) {

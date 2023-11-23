@@ -16,3 +16,15 @@ export class WorkerResponseDto extends WorkerResponseWhiteList {
     Object.assign(this, partial);
   }
 }
+
+@Exclude()
+export class WorkerIdResponseDto {
+  constructor(partial: Partial<WorkerIdResponseDto>) {
+    Object.assign(this, partial);
+  }
+  @Expose()
+  id: string;
+
+  @Expose()
+  companyId: string;
+}

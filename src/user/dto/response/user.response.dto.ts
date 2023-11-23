@@ -24,12 +24,3 @@ export class UserResponseDto extends UserResponseWhiteListDto {
     Object.assign(this, partial);
   }
 }
-
-@Exclude()
-export class WorkerIdResponseDto {
-  constructor(partial: Partial<WorkerIdResponseDto>) {
-    Object.assign(this, partial);
-  }
-  @Expose()
-  id: string;
-}

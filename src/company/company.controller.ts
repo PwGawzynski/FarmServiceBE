@@ -32,4 +32,10 @@ export class CompanyController {
   async delete(@GetOwnedCompany() company: Company, @GetUser() user: User) {
     return this.companyService.delete(company, user);
   }
+
+  @Get('workers')
+  @Owner()
+  async getCompanyWorkers(@GetOwnedCompany() company: Company) {
+    return this.companyService.getCompanyWorkers(company);
+  }
 }

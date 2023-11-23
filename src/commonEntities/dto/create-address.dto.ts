@@ -5,13 +5,12 @@ import {
   Length,
   Matches,
 } from 'class-validator';
-import { AddressDataTransferObjectI } from '../../../FarmServiceTypes/User/RegisterNewUserDataDtoInterfaceMobi';
 import AddressConstants from '../../../FarmServiceTypes/Address/Constants';
 
 /**
  * This DTO represent all address entities in application
  */
-export class CreateAddressDto implements AddressDataTransferObjectI {
+export class CreateAddressDto {
   @IsString({
     message: 'City must be string type',
   })

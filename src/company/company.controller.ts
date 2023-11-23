@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { Owner } from '../../decorators/auth.decorators';
 import { CreateCompanyDto } from './dto/create-company.dto';

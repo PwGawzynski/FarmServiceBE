@@ -64,7 +64,11 @@ export class Task extends BaseEntity {
   @JoinColumn({ name: 'field_id' })
   field: Promise<Field>;
 
-  async _shouldBeValid(company: Company) {
+  @ManyToOne(() => Company, (company) => company.tasks)
+  @JoinColumn({ name: 'company_id' })
+  company: Promise<Company>;
+
+  async _shouldBeValidWhenCreate(company: Company) {
     const order = await this.order;
     const field = await this.field;
     const idsMatches = order.id === (await field.order).id;

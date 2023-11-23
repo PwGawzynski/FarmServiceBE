@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   Entity,
   JoinColumn,
@@ -8,9 +9,16 @@ import {
 import { Order } from '../../order/entities/order.entity';
 import { Field } from '../../field/entities/field.entity';
 import { Worker } from '../../worker/entities/worker.entity';
+import { TaskType } from '../../../FarmServiceTypes/Task/Enums';
+import { ConflictException } from '@nestjs/common';
+import { Company } from '../../company/entities/company.entity';
 
 @Entity()
-export class Task {
+export class Task extends BaseEntity {
+  constructor(partial?: Partial<Task>) {
+    super();
+    Object.assign(this, partial);
+  }
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -20,6 +28,13 @@ export class Task {
     name: 'is_done',
   })
   isDone?: boolean;
+
+  @Column({
+    type: 'enum',
+    enum: TaskType,
+    nullable: false,
+  })
+  type: TaskType;
 
   // TODO add connection table task-[start-pause-logs] to store logs when task is opened passed opened and closed
 
@@ -48,4 +63,18 @@ export class Task {
   @ManyToOne(() => Field, (field) => field.tasks)
   @JoinColumn({ name: 'field_id' })
   field: Promise<Field>;
+
+  async _shouldBeValid(company: Company) {
+    const order = await this.order;
+    const field = await this.field;
+    const idsMatches = order.id === (await field.order).id;
+    const isCompanyWorker =
+      (await (await this.worker).company).id === company.id;
+    const isCompanyOrder = (await (await this.order).company).id === company.id;
+    if (!idsMatches && isCompanyWorker && isCompanyOrder)
+      throw new ConflictException(
+        `Given field ${field.id} is not assigned to order`,
+      );
+    return true;
+  }
 }

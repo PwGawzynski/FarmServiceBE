@@ -71,6 +71,7 @@ export class CompanyService {
       (await company.workers).map(
         async (worker) =>
           new WorkerResponseDto({
+            ...worker,
             personalData: await (await worker.user).personalData,
           }),
       ),

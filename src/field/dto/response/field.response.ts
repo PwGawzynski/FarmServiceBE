@@ -6,6 +6,9 @@ export class FieldResponseWhiteList {
   }
 
   @Expose()
+  id: string;
+
+  @Expose()
   polishSystemId: string;
 
   @Expose()

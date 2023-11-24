@@ -14,6 +14,7 @@ import CompanyConstants from '../../../FarmServiceTypes/Company/Constants';
 import { CompanyAddress } from '../../company-address/entities/company-address.entity';
 import { ConflictException } from '@nestjs/common';
 import { Order } from '../../order/entities/order.entity';
+import { Task } from '../../task/entities/task.entity';
 
 @Entity()
 export class Company extends BaseEntity {
@@ -59,6 +60,9 @@ export class Company extends BaseEntity {
 
   @OneToMany(() => Order, (Order) => Order.company, { nullable: true })
   orders?: Promise<Array<Order> | undefined>;
+
+  @OneToMany(() => Task, (task) => task.company, { nullable: true })
+  tasks?: Promise<Task[]>;
 
   @Column({
     type: 'boolean',

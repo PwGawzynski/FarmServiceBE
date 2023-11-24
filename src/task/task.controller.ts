@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { ApiTags } from '@nestjs/swagger';
 import { Owner } from '../../decorators/auth.decorators';
 import { CrateTaskCollection } from './dto/create-task.dto';
 import { GetOwnedCompany } from '../../decorators/user.decorators';
 import { Company } from '../company/entities/company.entity';
+import { DeleteTaskDto } from './dto/delete-task.dto';
 
 @ApiTags('TaskController ')
 @Controller('task')
@@ -33,5 +34,14 @@ export class TaskController {
     @Param('id') id: string,
   ) {
     return this.taskService.allByOrder(company, id);
+  }
+
+  @Delete()
+  @Owner()
+  async delete(
+    @Body() deleteTaskDto: DeleteTaskDto,
+    @GetOwnedCompany() company: Company,
+  ) {
+    return this.taskService.delete(deleteTaskDto, company);
   }
 }

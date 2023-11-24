@@ -3,8 +3,8 @@ import { CreateTaskResponseDto } from './create-task.response.dto';
 import { TaskResponseBase } from '../../../../FarmServiceTypes/Task/Restonses';
 
 const test: Equal<
-  Omit<CreateTaskResponseDto, 'field'>,
-  Omit<TaskResponseBase, 'field'>
+  Omit<CreateTaskResponseDto, 'field' | 'worker'>,
+  Omit<TaskResponseBase, 'field' | 'worker'>
 > = true;
 
 describe('Does CreateTaskResponseDto match TaskResponseBase', () => {

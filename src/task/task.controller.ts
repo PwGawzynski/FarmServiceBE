@@ -1,11 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { TaskService } from './task.service';
 import { ApiTags } from '@nestjs/swagger';
-import { Owner } from '../../decorators/auth.decorators';
+import { Owner, Worker } from '../../decorators/auth.decorators';
 import { CrateTaskCollection } from './dto/create-task.dto';
-import { GetOwnedCompany } from '../../decorators/user.decorators';
+import { GetOwnedCompany, GetUser } from '../../decorators/user.decorators';
 import { Company } from '../company/entities/company.entity';
 import { DeleteTaskDto } from './dto/delete-task.dto';
+import { User } from '../user/entities/user.entity';
 
 @ApiTags('TaskController ')
 @Controller('task')
@@ -34,6 +43,24 @@ export class TaskController {
     @Param('id') id: string,
   ) {
     return this.taskService.allByOrder(company, id);
+  }
+
+  @Get('worker')
+  @Worker()
+  async getAssignedTasks(@GetUser() user: User) {
+    return this.taskService.getAssignedTasks(user);
+  }
+
+  @Post('open')
+  @Worker()
+  async open(@Query('id') id: string, @GetUser() user: User) {
+    return this.taskService.open(id, user);
+  }
+
+  @Post('close')
+  @Worker()
+  async close(@Query('id') id: string, @GetUser() user: User) {
+    return this.taskService.close(id, user);
   }
 
   @Delete()

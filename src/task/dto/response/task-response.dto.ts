@@ -17,6 +17,9 @@ export class CreateTaskResponseWhiteList {
   type: TaskType;
 
   @Expose()
+  createdAt: Date;
+
+  @Expose()
   openedAt?: Date;
 
   @Expose()
@@ -26,12 +29,12 @@ export class CreateTaskResponseWhiteList {
   field: FieldResponseDto;
 
   @Expose()
-  worker: WorkerResponseDto;
+  worker?: WorkerResponseDto;
 }
 
 @Exclude()
-export class CreateTaskResponseDto extends CreateTaskResponseWhiteList {
-  constructor(partial: Partial<CreateTaskResponseDto>) {
+export class TaskResponseDto extends CreateTaskResponseWhiteList {
+  constructor(partial: Partial<TaskResponseDto>) {
     super(partial);
     Object.assign(this, partial);
   }

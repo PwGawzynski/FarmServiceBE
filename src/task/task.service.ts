@@ -44,6 +44,8 @@ export class TaskService {
             worker: {
               ...(await task.worker),
               personalData: await (await (await task.worker).user).personalData,
+              address: await (await (await task.worker).user).address,
+              email: (await (await task.worker).user).email,
             },
           }),
       ),
@@ -66,6 +68,8 @@ export class TaskService {
             worker: {
               ...(await task.worker),
               personalData: await (await (await task.worker).user).personalData,
+              address: await (await (await task.worker).user).address,
+              email: (await (await task.worker).user).email,
             },
           }),
       ),

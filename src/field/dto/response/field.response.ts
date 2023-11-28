@@ -1,4 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
+import { FieldAddressResponseDto } from '../../../field-address/dto/response/field-address.response.dto';
 
 export class FieldResponseWhiteList {
   constructor(partial: Partial<FieldResponseDto>) {
@@ -18,7 +19,7 @@ export class FieldResponseWhiteList {
   dateOfCollectionData: Date;
 
   @Expose()
-  addressId: string;
+  address: FieldAddressResponseDto;
 }
 
 @Exclude()

@@ -1,5 +1,6 @@
 import {
   BaseEntity,
+  Column,
   Entity,
   Index,
   JoinColumn,
@@ -12,6 +13,7 @@ import { User } from '../../user/entities/user.entity';
 import { Company } from '../../company/entities/company.entity';
 import { Task } from '../../task/entities/task.entity';
 import { ConflictException } from '@nestjs/common';
+import { Position, Status } from '../../../FarmServiceTypes/Worker/Enums';
 
 @Entity()
 export class Worker extends BaseEntity {
@@ -44,6 +46,20 @@ export class Worker extends BaseEntity {
 
   @OneToMany(() => Task, (task) => task.worker, { nullable: true })
   tasks?: Promise<Task[]>;
+
+  @Column({
+    type: 'enum',
+    enum: Position,
+    default: Position.Operator,
+  })
+  position?: Position;
+
+  @Column({
+    type: 'enum',
+    enum: Status,
+    default: Status.Active,
+  })
+  status?: Status;
 
   async _shouldNotExist() {
     const exist = await Worker.findOne({

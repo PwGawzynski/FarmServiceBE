@@ -1,9 +1,10 @@
 import { Equal } from '../../../../TypeScriptHelpers/dtoToInterface';
-import { UserResponseDto, WorkerIdResponseDto } from './user.response.dto';
+import { UserResponseDto } from './user.response.dto';
 import {
   UserResponseBase,
   WorkerIdResponseI,
 } from '../../../../FarmServiceTypes/User/Responses';
+import { WorkerIdResponseDto } from '../../../worker/dto/response/worker-response.dto';
 
 const test: Equal<
   Omit<UserResponseDto, 'personalData' | 'address' | 'account'>,

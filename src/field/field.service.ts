@@ -12,6 +12,7 @@ import {
 } from '../../FarmServiceTypes/respnse/responseGeneric';
 import { FieldResponseDto } from './dto/response/field.response';
 import { Company } from '../company/entities/company.entity';
+import { FieldAddressResponseDto } from '../field-address/dto/response/field-address.response.dto';
 
 @Injectable()
 export class FieldService {
@@ -35,7 +36,7 @@ export class FieldService {
       code: ResponseCode.ProcessedWithoutConfirmationWaiting,
       payload: new FieldResponseDto({
         ...newField,
-        addressId: filedAddress.id,
+        address: new FieldAddressResponseDto(filedAddress),
       }),
     } as ResponseObject<FieldResponseDto>;
   }
@@ -49,7 +50,7 @@ export class FieldService {
       code: ResponseCode.ProcessedCorrect,
       payload: new FieldResponseDto({
         ...field,
-        addressId: (await field.address).id,
+        address: new FieldAddressResponseDto(await field.address),
       }),
     } as ResponseObject<FieldResponseDto>;
   }
@@ -62,7 +63,17 @@ export class FieldService {
     }
     return {
       code: ResponseCode.ProcessedCorrect,
-      payload: (await order.fields).map((f) => new FieldResponseDto(f)),
+      payload: await Promise.all(
+        (
+          await order.fields
+        ).map(
+          async (f) =>
+            new FieldResponseDto({
+              ...f,
+              address: new FieldAddressResponseDto(await f.address),
+            }),
+        ),
+      ),
     } as ResponseObject<FieldResponseDto[]>;
   }
 }

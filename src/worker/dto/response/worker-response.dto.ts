@@ -1,5 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import { UserPersonalDataResponseDto } from '../../../user/dto/response/userPersonalData.response.dto';
+import { Position, Status } from '../../../../FarmServiceTypes/Worker/Enums';
+import { AddressResponseDto } from '../../../commonEntities/dto/response/address.response.dto';
 
 export class WorkerResponseWhiteList {
   constructor(partial: Partial<WorkerResponseDto>) {
@@ -10,6 +12,18 @@ export class WorkerResponseWhiteList {
 
   @Expose()
   personalData: UserPersonalDataResponseDto;
+
+  @Expose()
+  address: AddressResponseDto;
+
+  @Expose()
+  position?: Position;
+
+  @Expose()
+  status?: Status;
+
+  @Expose()
+  email: string;
 }
 
 @Exclude()

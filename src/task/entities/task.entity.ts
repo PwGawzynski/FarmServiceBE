@@ -40,10 +40,17 @@ export class Task extends BaseEntity {
 
   @Column({
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
+    nullable: true,
     name: 'opened_at',
   })
   openedAt?: Date;
+
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    name: 'created_at',
+  })
+  createdAt?: Date;
 
   @Column({
     type: 'timestamp',

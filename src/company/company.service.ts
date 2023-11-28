@@ -9,6 +9,8 @@ import {
 } from '../../FarmServiceTypes/respnse/responseGeneric';
 import { CompanyResponseDto } from './dto/response/company.response.dto';
 import { WorkerResponseDto } from '../worker/dto/response/worker-response.dto';
+import { UserPersonalDataResponseDto } from '../user/dto/response/userPersonalData.response.dto';
+import { AddressResponseDto } from '../commonEntities/dto/response/address.response.dto';
 
 @Injectable()
 export class CompanyService {
@@ -72,7 +74,13 @@ export class CompanyService {
         async (worker) =>
           new WorkerResponseDto({
             ...worker,
-            personalData: await (await worker.user).personalData,
+            personalData: new UserPersonalDataResponseDto(
+              await (
+                await worker.user
+              ).personalData,
+            ),
+            address: new AddressResponseDto(await (await worker.user).address),
+            email: (await worker.user).email,
           }),
       ),
     );

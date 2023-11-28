@@ -1,10 +1,10 @@
 import { Equal } from '../../../../TypeScriptHelpers/dtoToInterface';
 import { FieldResponseWhiteList } from './field.response';
-import { FiledResponseBase } from '../../../../FarmServiceTypes/Field/Ressponses';
+import { FieldResponseBase } from '../../../../FarmServiceTypes/Field/Ressponses';
 
 const test: Equal<
   Omit<FieldResponseWhiteList, 'addressId'>,
-  Omit<FiledResponseBase, 'address'>
+  Omit<FieldResponseBase, 'address'>
 > = true;
 
 describe('Does FieldResponseWhiteList  match FiledResponseBase', () => {

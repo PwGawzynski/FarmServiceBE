@@ -6,8 +6,11 @@ import {
   ResponseCode,
   ResponseObject,
 } from '../../FarmServiceTypes/respnse/responseGeneric';
-import { CreateTaskResponseDto } from './dto/response/create-task.response.dto';
+import { TaskResponseDto } from './dto/response/task-response.dto';
 import { DeleteTaskDto } from './dto/delete-task.dto';
+import { User } from '../user/entities/user.entity';
+import { FieldResponseDto } from '../field/dto/response/field.response';
+import { FieldAddressResponseDto } from '../field-address/dto/response/field-address.response.dto';
 
 @Injectable()
 export class TaskService {
@@ -35,11 +38,15 @@ export class TaskService {
     return Promise.all(
       (await company.tasks).map(
         async (task) =>
-          new CreateTaskResponseDto({
+          new TaskResponseDto({
             ...task,
             field: {
               ...(await task.field),
-              addressId: (await (await task.field).address).id,
+              address: new FieldAddressResponseDto(
+                await (
+                  await task.field
+                ).address,
+              ),
             },
             worker: {
               ...(await task.worker),
@@ -59,11 +66,15 @@ export class TaskService {
     return Promise.all(
       filtered.map(
         async (task) =>
-          new CreateTaskResponseDto({
+          new TaskResponseDto({
             ...task,
             field: {
               ...(await task.field),
-              addressId: (await (await task.field).address).id,
+              address: new FieldAddressResponseDto(
+                await (
+                  await task.field
+                ).address,
+              ),
             },
             worker: {
               ...(await task.worker),
@@ -82,6 +93,54 @@ export class TaskService {
     if (!isAssignedToCompany)
       throw new ConflictException('This task is not assigned to yours company');
     deleteTaskDto.task.remove();
+    return { code: ResponseCode.ProcessedCorrect } as ResponseObject;
+  }
+
+  async getAssignedTasks(user: User) {
+    const worker = await user.worker;
+    console.log(worker, 'WORKER TEST');
+    const tasks = await worker.tasks;
+    console.log(tasks, 'RES');
+    const responseTasks = await Promise.all(
+      tasks
+        .filter((t) => !t.isDone)
+        .map(
+          async (t) =>
+            new TaskResponseDto({
+              ...t,
+              field: new FieldResponseDto({
+                ...(await t.field),
+                address: new FieldAddressResponseDto(
+                  await (
+                    await t.field
+                  ).address,
+                ),
+              }),
+              worker: undefined,
+            }),
+        ),
+    );
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: responseTasks,
+    } as ResponseObject<TaskResponseDto[]>;
+  }
+
+  async open(id: string, user: User) {
+    const worker = await user.worker;
+    const task = (await worker.tasks).find((t) => t.id === id);
+    if (!task) throw new ConflictException('Given Task Does not exist');
+    task.openedAt = new Date();
+    task.save();
+    return { code: ResponseCode.ProcessedCorrect } as ResponseObject;
+  }
+
+  async close(id: string, user: User) {
+    const worker = await user.worker;
+    const task = (await worker.tasks).find((t) => t.id === id);
+    if (!task) throw new ConflictException('Given Task Does not exist');
+    task.closedAt = new Date();
+    task.save();
     return { code: ResponseCode.ProcessedCorrect } as ResponseObject;
   }
 }

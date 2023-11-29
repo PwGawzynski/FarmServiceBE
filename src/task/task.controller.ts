@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { ApiTags } from '@nestjs/swagger';
 import { Owner, Worker } from '../../decorators/auth.decorators';

@@ -1,4 +1,4 @@
-import { ConflictException, flatten, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CrateTaskCollection } from './dto/create-task.dto';
 import { Task } from './entities/task.entity';
 import { Company } from '../company/entities/company.entity';

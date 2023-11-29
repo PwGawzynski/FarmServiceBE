@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, flatten, Injectable } from '@nestjs/common';
 import { CrateTaskCollection } from './dto/create-task.dto';
 import { Task } from './entities/task.entity';
 import { Company } from '../company/entities/company.entity';
@@ -60,9 +60,10 @@ export class TaskService {
   }
 
   async allByOrder(company: Company, id: string) {
-    const filtered = (await company.tasks).filter(
-      async (task) => (await task.order).id === id,
+    const test = await Promise.all(
+      (await company.tasks).map(async (task) => (await task.order).id === id),
     );
+    const filtered = (await company.tasks).filter((task, index) => test[index]);
     return Promise.all(
       filtered.map(
         async (task) =>

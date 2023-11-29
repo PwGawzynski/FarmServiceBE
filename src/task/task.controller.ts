@@ -40,7 +40,7 @@ export class TaskController {
   @Owner()
   async allByOrder(
     @GetOwnedCompany() company: Company,
-    @Param('id') id: string,
+    @Query('id') id: string,
   ) {
     return this.taskService.allByOrder(company, id);
   }

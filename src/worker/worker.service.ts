@@ -44,6 +44,7 @@ export class WorkerService {
   }
 
   isAssigned(id: string) {
+    console.log('KURWAAATEST');
     return interval(2000).pipe(
       concatMap(async () => {
         const worker = await Worker.findOne({ where: { user: { id } } });

@@ -13,11 +13,148 @@ import {
 import { FieldResponseDto } from './dto/response/field.response';
 import { Company } from '../company/entities/company.entity';
 import { FieldAddressResponseDto } from '../field-address/dto/response/field-address.response.dto';
+import * as convert from 'xml-js';
+import { HttpService } from '@nestjs/axios';
+import { CreateFieldAddressDto } from '../field-address/dto/create-field-address.dto';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const proj4 = require('proj4');
+type DataObject = {
+  type: 'text' | 'cdata' | string;
+  text: string;
+  cdata: string;
+};
+interface DataFromUldk {
+  type: 'element' | string;
+  name: 'Attribute' | string;
+  attributes: { Name: string };
+  elements: Array<DataObject>;
+}
+
+type ParsedDataFromApiI = {
+  key:
+    | 'Identyfikator działki'
+    | 'Województwo'
+    | 'Powiat'
+    | 'Gmina'
+    | 'Obręb'
+    | 'Numer działki'
+    | 'Pole pow. w ewidencji gruntów (ha)'
+    | 'KW'
+    | 'Grupa rejestrowa'
+    | 'Oznaczenie użytku'
+    | 'Oznaczenie konturu'
+    | 'Data publikacji danych'
+    | 'Informacje o pochodzeniu danych'
+    | 'Informacje dodatkowe o działce'
+    | 'Kod QR'
+    | string;
+  value: string;
+};
 
 @Injectable()
 export class FieldService {
+  constructor(private readonly httpService: HttpService) {}
+  private async _getFiledArea(latitude: number, longitude: number) {
+    const fieldHa = (
+      await this.httpService.axiosRef.get(
+        `https://integracja.gugik.gov.pl/cgi-bin/KrajowaIntegracjaEwidencjiGruntow?SERVICE=WMS&request=GetFeatureInfo&version=1.3.0&layers=obreby,dzialki,geoportal&styles=&crs=EPSG:2180&bbox=${
+          longitude + 0.01
+        },${latitude + 0.01},${longitude + 0.02},${
+          latitude + 0.02
+        }&width=10&height=10&format=image/png&transparent=true&query_layers=geoportal&i=1&j=1&INFO_FORMAT=text/xml`,
+      )
+    ).data as unknown as string;
+
+    const parsedDataFromApi: Array<ParsedDataFromApiI> = (
+      convert.xml2js(fieldHa).elements[0].elements[0].elements[0]
+        .elements as Array<DataFromUldk>
+    )
+      .map((integrationLayerAttribute) => ({
+        value:
+          integrationLayerAttribute.elements &&
+          (integrationLayerAttribute.elements[0].text ||
+            integrationLayerAttribute.elements[0].cdata),
+        key: integrationLayerAttribute.attributes.Name,
+      }))
+      .filter((processedData) => processedData.value);
+
+    const area = parsedDataFromApi.find(
+      (v) => v.key === 'Pole pow. w ewidencji gruntów (ha)',
+    )?.value;
+    const dateOfCollectionData = parsedDataFromApi.find(
+      (v) => v.key === 'Data publikacji danych',
+    )?.value;
+    const county = parsedDataFromApi.find((v) =>
+      v.key.includes('Powiat'),
+    )?.value;
+    const city = parsedDataFromApi.find((v) => v.key.includes('Gmina'))?.value;
+    const voivodeship = parsedDataFromApi.find((v) =>
+      v.key.includes('Województwo'),
+    )?.value;
+    const polishSystemId = parsedDataFromApi.find((v) =>
+      v.key.includes('Identyfikator działki'),
+    )?.value;
+    console.log(
+      area,
+      dateOfCollectionData,
+      county,
+      city,
+      voivodeship,
+      polishSystemId,
+    );
+    return {
+      area: Number(area),
+      dateOfCollectionData: new Date(dateOfCollectionData),
+      county,
+      city,
+      voivodeship,
+      polishSystemId,
+    };
+  }
+
+  private async _getPlodId(
+    latitude: number,
+    longitude: number,
+  ): Promise<string | false> {
+    // in case of issues check returning value from below
+    // returning data format is status\nIDField\n that's why i use split to split to array data and then check if response is ok
+    // TODO #IMP
+    const plotId = (
+      (
+        await this.httpService.axiosRef.get(
+          `https://uldk.gugik.gov.pl/?request=GetParcelByXY&xy=${latitude},${longitude}&result=teryt`,
+        )
+      ).data as unknown as string
+    ).split('\n') as [string, string];
+    console.log(plotId, 'tescik');
+    return !isNaN(Number(plotId[0])) && Number(plotId[0]) !== -1
+      ? plotId[1]
+      : false;
+  }
+
+  private _transformCords(data: CreateFieldAddressDto) {
+    proj4.defs(
+      'EPSG:2180',
+      '+proj=tmerc +lat_0=0 +lon_0=19 +k=0.9993 +x_0=500000 +y_0=-5300000 +ellps=GRS80 +units=m +no_defs',
+    );
+
+    const src_crs = 'WGS84';
+
+    const dst_crs = 'EPSG:2180';
+
+    return proj4(proj4.defs(src_crs), proj4.defs(dst_crs), [
+      Number(data.longitude),
+      Number(data.latitude),
+    ]);
+  }
   async createByOwner(createFieldDto: CreateFieldDto) {
     const filedAddress = new FieldAddress({ ...createFieldDto.address });
+
+    const [longitude, latitude] = this._transformCords(filedAddress);
+
+    console.log(await this._getFiledArea(longitude, latitude), 'TEST_AREA');
+    console.log(await this._getPlodId(longitude, latitude), 'TEST_PL_ID');
+    return;
     const newField = new Field({
       ...createFieldDto,
       order: Promise.resolve(createFieldDto.order),

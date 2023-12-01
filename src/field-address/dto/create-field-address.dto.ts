@@ -6,7 +6,6 @@ import {
   IsNotEmpty,
   IsString,
   Length,
-  Matches,
 } from 'class-validator';
 import FieldAddressConstants from '../../../FarmServiceTypes/FiledAddress/Constants';
 

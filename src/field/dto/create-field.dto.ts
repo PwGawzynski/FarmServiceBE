@@ -23,15 +23,13 @@ import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReje
 import { Order } from '../../order/entities/order.entity';
 
 // TODO change to create only by latitude and longitude
-export class CreateFieldDto
-  implements OmitBaseEntityAndId<Field, 'address' | 'order'>
-{
+export class CreateFieldDto {
   @IsString({ message: 'Polish system id must be a string' })
   @Length(FieldConstants.POLISH_ID_MIN_LEN, FieldConstants.POLISH_ID_MAX_LEN)
   /**
    * checks if matches format 02034_2.0008.241
    */
-  @Matches(/^\d{5}_\d+\.\d{4}\.\d{3}$/, {
+  @Matches(/^\d{5,8}_\d+\.\d{4}\.\d{3}(\/\d+_BUD)?$/, {
     message: 'Polish system id must fulfill pattern 02034_2.0008.241',
   })
   @IsNotEmpty({ message: 'Polish system id must be not empty strings' })

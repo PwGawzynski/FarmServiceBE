@@ -13,6 +13,7 @@ import { FieldAddress } from '../../field-address/entities/field-address.entity'
 import { Order } from '../../order/entities/order.entity';
 import FieldConstants from '../../../FarmServiceTypes/Field/Constants';
 import { Task } from '../../task/entities/task.entity';
+import { ConflictException } from '@nestjs/common';
 
 @Entity()
 export class Field extends BaseEntity {
@@ -73,4 +74,16 @@ export class Field extends BaseEntity {
 
   @OneToMany(() => Task, (tasks) => tasks.field, { nullable: true })
   tasks?: Promise<Task[]>;
+
+  async _shouldNotExist() {
+    const exist = await Field.findOne({
+      where: {
+        polishSystemId: this.polishSystemId,
+      },
+    });
+    if (exist)
+      throw new ConflictException(
+        'Filed with given polishSystemId is already registered',
+      );
+  }
 }

@@ -15,7 +15,8 @@ import { Company } from '../company/entities/company.entity';
 import { FieldAddressResponseDto } from '../field-address/dto/response/field-address.response.dto';
 import * as convert from 'xml-js';
 import { HttpService } from '@nestjs/axios';
-import { CreateFieldAddressDto } from '../field-address/dto/create-field-address.dto';
+import { GetDataFromXLMDto } from './dto/get-dataFromXLM.dto';
+import { DataFromXLMResponseDto } from './dto/response/dataFromXLM.dto';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const proj4 = require('proj4');
 type DataObject = {
@@ -54,19 +55,9 @@ type ParsedDataFromApiI = {
 @Injectable()
 export class FieldService {
   constructor(private readonly httpService: HttpService) {}
-  private async _getFiledArea(latitude: number, longitude: number) {
-    const fieldHa = (
-      await this.httpService.axiosRef.get(
-        `https://integracja.gugik.gov.pl/cgi-bin/KrajowaIntegracjaEwidencjiGruntow?SERVICE=WMS&request=GetFeatureInfo&version=1.3.0&layers=obreby,dzialki,geoportal&styles=&crs=EPSG:2180&bbox=${
-          longitude + 0.01
-        },${latitude + 0.01},${longitude + 0.02},${
-          latitude + 0.02
-        }&width=10&height=10&format=image/png&transparent=true&query_layers=geoportal&i=1&j=1&INFO_FORMAT=text/xml`,
-      )
-    ).data as unknown as string;
-
+  private async _getFiledArea(data: string) {
     const parsedDataFromApi: Array<ParsedDataFromApiI> = (
-      convert.xml2js(fieldHa).elements[0].elements[0].elements[0]
+      convert.xml2js(data).elements[0].elements[0].elements[0]
         .elements as Array<DataFromUldk>
     )
       .map((integrationLayerAttribute) => ({
@@ -112,7 +103,7 @@ export class FieldService {
     };
   }
 
-  private async _getPlodId(
+  /*private async _getPlodId(
     latitude: number,
     longitude: number,
   ): Promise<string | false> {
@@ -130,9 +121,9 @@ export class FieldService {
     return !isNaN(Number(plotId[0])) && Number(plotId[0]) !== -1
       ? plotId[1]
       : false;
-  }
+  }*/
 
-  private _transformCords(data: CreateFieldAddressDto) {
+  /*private _transformCords(data: CreateFieldAddressDto) {
     proj4.defs(
       'EPSG:2180',
       '+proj=tmerc +lat_0=0 +lon_0=19 +k=0.9993 +x_0=500000 +y_0=-5300000 +ellps=GRS80 +units=m +no_defs',
@@ -146,15 +137,9 @@ export class FieldService {
       Number(data.longitude),
       Number(data.latitude),
     ]);
-  }
+  }*/
   async createByOwner(createFieldDto: CreateFieldDto) {
     const filedAddress = new FieldAddress({ ...createFieldDto.address });
-
-    const [longitude, latitude] = this._transformCords(filedAddress);
-
-    console.log(await this._getFiledArea(longitude, latitude), 'TEST_AREA');
-    console.log(await this._getPlodId(longitude, latitude), 'TEST_PL_ID');
-    return;
     const newField = new Field({
       ...createFieldDto,
       order: Promise.resolve(createFieldDto.order),
@@ -212,5 +197,13 @@ export class FieldService {
         ),
       ),
     } as ResponseObject<FieldResponseDto[]>;
+  }
+
+  async getDataFromXLM(xlm: GetDataFromXLMDto) {
+    const data = await this._getFiledArea(xlm.data);
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: new DataFromXLMResponseDto(data),
+    } as ResponseObject<DataFromXLMResponseDto>;
   }
 }

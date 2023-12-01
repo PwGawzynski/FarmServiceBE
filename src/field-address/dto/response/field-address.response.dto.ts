@@ -7,8 +7,8 @@ export class FieldAddressResponseWhiteList {
   county: string;
   @Expose()
   voivodeship: string;
-  @Expose()
-  postalCode: string;
+  /*@Expose()
+  postalCode: string;*/
   @Expose()
   longitude: string;
   @Expose()

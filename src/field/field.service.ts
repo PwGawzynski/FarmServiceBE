@@ -18,8 +18,7 @@ import { HttpService } from '@nestjs/axios';
 import { GetDataFromXLMDto } from './dto/get-dataFromXLM.dto';
 import { DataFromXLMResponseDto } from './dto/response/dataFromXLM.dto';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const proj4 = require('proj4');
-type DataObject = {
+/*const proj4 = require('proj4')*/ type DataObject = {
   type: 'text' | 'cdata' | string;
   text: string;
   cdata: string;
@@ -145,6 +144,7 @@ export class FieldService {
       order: Promise.resolve(createFieldDto.order),
       address: Promise.resolve(filedAddress),
     });
+    await newField._shouldNotExist();
 
     await filedAddress.save();
     newField.address = Promise.resolve(filedAddress);

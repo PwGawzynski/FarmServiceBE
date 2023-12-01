@@ -3,7 +3,7 @@ import { FieldResponseWhiteList } from './field.response';
 import { FieldResponseBase } from '../../../../FarmServiceTypes/Field/Ressponses';
 
 const test: Equal<
-  Omit<FieldResponseWhiteList, 'addressId'>,
+  Omit<FieldResponseWhiteList, 'address'>,
   Omit<FieldResponseBase, 'address'>
 > = true;
 

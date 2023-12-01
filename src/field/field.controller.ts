@@ -5,6 +5,7 @@ import { GetOwnedCompany } from '../../decorators/user.decorators';
 import { CreateFieldDto } from './dto/create-field.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Company } from '../company/entities/company.entity';
+import { GetDataFromXLMDto } from './dto/get-dataFromXLM.dto';
 
 @ApiTags('Field')
 @Controller('field')
@@ -15,6 +16,12 @@ export class FieldController {
   @Owner()
   async createByOwner(@Body() createFieldDto: CreateFieldDto) {
     return this.fieldService.createByOwner(createFieldDto);
+  }
+
+  @Post('xmlTranslate')
+  @Owner()
+  async getDataFromXLM(@Body() xlm: GetDataFromXLMDto) {
+    return this.fieldService.getDataFromXLM(xlm);
   }
 
   @Get()

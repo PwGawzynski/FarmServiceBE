@@ -15,7 +15,7 @@ export class FieldAddress extends BaseEntity {
   constructor(options?: {
     city: string;
     county: string;
-    postalCode: string;
+    /*postalCode: string;*/
     latitude: string;
     longitude: string;
     voivodeship: string;
@@ -28,7 +28,7 @@ export class FieldAddress extends BaseEntity {
       this.voivodeship = options.voivodeship;
       this.latitude = options.latitude;
       this.longitude = options.longitude;
-      this.postalCode = options.postalCode;
+      /*this.postalCode = options.postalCode;*/
       this.field = options.field;
     }
   }
@@ -57,12 +57,12 @@ export class FieldAddress extends BaseEntity {
   })
   county: string;
 
-  @Column({
+  /*@Column({
     type: 'varchar',
     length: FieldAddressConstants.POSTAL_CODE_LEN,
     nullable: false,
   })
-  postalCode: string;
+  postalCode: string;*/
 
   @Column({
     type: 'varchar',

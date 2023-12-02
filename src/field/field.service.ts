@@ -163,9 +163,23 @@ export class FieldService {
     } as ResponseObject<FieldResponseDto>;
   }
 
-  async getOne(PLid: string) {
+  async getOnePlId(PLid: string) {
     const field = await Field.findOne({
       where: { polishSystemId: PLid },
+    });
+    if (!field) throw new NotFoundException('Cannot find field with given id');
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: new FieldResponseDto({
+        ...field,
+        address: new FieldAddressResponseDto(await field.address),
+      }),
+    } as ResponseObject<FieldResponseDto>;
+  }
+
+  async getOne(id: string) {
+    const field = await Field.findOne({
+      where: { id },
     });
     if (!field) throw new NotFoundException('Cannot find field with given id');
     return {
@@ -205,5 +219,16 @@ export class FieldService {
       code: ResponseCode.ProcessedCorrect,
       payload: new DataFromXLMResponseDto(data),
     } as ResponseObject<DataFromXLMResponseDto>;
+  }
+
+  async delete(id: string) {
+    const field = await Field.findOne({
+      where: { id },
+    });
+    if (!field) throw new NotFoundException('Cannot find field with given id');
+    field.remove();
+    return {
+      code: ResponseCode.ProcessedCorrect,
+    } as ResponseObject<FieldResponseDto>;
   }
 }

@@ -68,27 +68,24 @@ export class TaskService {
       (await company.tasks).map(async (task) => (await task.order).id === id),
     );
     const filtered = (await company.tasks).filter((task, index) => test[index]);
-    return Promise.all(
-      filtered.map(
-        async (task) =>
-          new TaskResponseDto({
-            ...task,
-            field: {
-              ...(await task.field),
-              address: new FieldAddressResponseDto(
-                await (
-                  await task.field
-                ).address,
-              ),
-            },
-            worker: {
-              ...(await task.worker),
-              personalData: await (await (await task.worker).user).personalData,
-              address: await (await (await task.worker).user).address,
-              email: (await (await task.worker).user).email,
-            },
-          }),
-      ),
+    return await Promise.all(
+      filtered.map(async (task) => {
+        return new TaskResponseDto({
+          ...task,
+          field: {
+            ...(await task.field),
+            address: new FieldAddressResponseDto({
+              ...(await (await task.field)?.address),
+            }),
+          },
+          worker: {
+            ...(await task.worker),
+            personalData: await (await (await task.worker).user).personalData,
+            address: await (await (await task.worker).user).address,
+            email: (await (await task.worker).user).email,
+          },
+        });
+      }),
     );
   }
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { FieldService } from './field.service';
 import { AllRoles, Owner } from '../../decorators/auth.decorators';
 import { GetOwnedCompany } from '../../decorators/user.decorators';
@@ -24,10 +24,22 @@ export class FieldController {
     return this.fieldService.getDataFromXLM(xlm);
   }
 
+  @Get('PLID')
+  @Owner()
+  async getOnePLId(@Query('PLid') PLid: string) {
+    return this.fieldService.getOnePlId(PLid);
+  }
+
   @Get()
   @Owner()
-  async getOne(@Query('PLid') PLid: string) {
-    return this.fieldService.getOne(PLid);
+  async getOne(@Query('id') id: string) {
+    return this.fieldService.getOne(id);
+  }
+
+  @Delete()
+  @Owner()
+  async delete(@Query('id') id: string) {
+    return this.fieldService.delete(id);
   }
 
   @Get('all-for-order')

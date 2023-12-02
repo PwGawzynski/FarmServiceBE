@@ -67,7 +67,7 @@ export class Task extends BaseEntity {
   @JoinColumn({ name: 'worker_id' })
   worker: Promise<Worker>;
 
-  @ManyToOne(() => Field, (field) => field.tasks)
+  @ManyToOne(() => Field, (field) => field.tasks, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'field_id' })
   field: Promise<Field>;
 

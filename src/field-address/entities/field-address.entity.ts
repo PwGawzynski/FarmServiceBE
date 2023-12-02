@@ -78,7 +78,10 @@ export class FieldAddress extends BaseEntity {
   })
   longitude: string;
 
-  @OneToOne(() => Field, (field) => field.address, { nullable: true })
+  @OneToOne(() => Field, (field) => field.address, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   @Index('UNIQ_FIELD', { unique: true })
   field?: Promise<Field>;

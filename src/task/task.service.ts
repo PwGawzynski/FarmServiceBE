@@ -11,6 +11,7 @@ import { DeleteTaskDto } from './dto/delete-task.dto';
 import { User } from '../user/entities/user.entity';
 import { FieldResponseDto } from '../field/dto/response/field.response';
 import { FieldAddressResponseDto } from '../field-address/dto/response/field-address.response.dto';
+import { OrderStatus } from '../../FarmServiceTypes/Order/Enums';
 
 @Injectable()
 export class TaskService {
@@ -27,6 +28,9 @@ export class TaskService {
     );
     for (const task of newTasks) {
       await task._shouldBeValidWhenCreate(company);
+      (await task.order).status = OrderStatus.Processing;
+      (await task.order).save();
+      console.log(await task.order);
       task.save();
     }
     return {

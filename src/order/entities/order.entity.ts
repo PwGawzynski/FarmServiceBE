@@ -60,7 +60,7 @@ export class Order extends BaseEntity {
   @Column({
     type: 'enum',
     enum: OrderStatus,
-    default: OrderStatus.Pending,
+    default: OrderStatus.Added,
     nullable: false,
   })
   status?: OrderStatus;

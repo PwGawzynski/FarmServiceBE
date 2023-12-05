@@ -12,9 +12,10 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Request } from 'express';
 import { User } from './entities/user.entity';
-import { GetUser } from '../../decorators/user.decorators';
+import { GetOwnedCompany, GetUser } from '../../decorators/user.decorators';
 import { AllowOnlyByToken, Public } from '../../decorators/auth.decorators';
 import { ApiTags } from '@nestjs/swagger';
+import { Company } from '../company/entities/company.entity';
 
 @ApiTags('User')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -44,5 +45,15 @@ export class UserController {
   @Get('me')
   async getUserByToken(@GetUser() user: User) {
     return this.userService.getUserAccountData(user);
+  }
+
+  @Get('personal_data')
+  async persona_Data(@GetUser() user: User) {
+    return this.userService.personal_data(user);
+  }
+
+  @Get('address_data')
+  async address_data(@GetUser() user: User) {
+    return this.userService.address_data(user);
   }
 }

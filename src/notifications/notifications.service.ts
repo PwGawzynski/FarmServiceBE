@@ -27,7 +27,7 @@ export class NotificationsService {
 
   getTasksSse(company: Company) {
     console.log('openedSeee');
-    return interval(10000).pipe(
+    return interval(5000).pipe(
       concatMap(async () => {
         console.log(In((await company.workers).map((u) => u.id)));
         const notifications = await Notification.find({

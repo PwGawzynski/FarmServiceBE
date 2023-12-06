@@ -80,8 +80,8 @@ export class User extends BaseEntity {
   @JoinColumn({ name: 'caused_notifications' })
   causedNotifications: Promise<Notification[]>;
 
-  @ManyToMany(() => Notification, (notification) => notification.recipients)
-  addressedNotifications: Promise<Notification[]>;
+  /*@ManyToMany(() => Notification, (notification) => notification.recipients)
+  addressedNotifications: Promise<Notification[]>;*/
 
   @OneToOne(() => Company, undefined, {
     nullable: true,

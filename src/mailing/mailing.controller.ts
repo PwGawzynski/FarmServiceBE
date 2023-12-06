@@ -1,7 +1,4 @@
-import {Controller, Get} from '@nestjs/common';
-import {MailingService} from "./mailing.service";
+import { Controller } from '@nestjs/common';
 
 @Controller('mailing')
-export class MailingController {
-
-}
+export class MailingController {}

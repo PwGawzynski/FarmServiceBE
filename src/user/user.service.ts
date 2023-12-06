@@ -16,6 +16,8 @@ import {
   ErrorPayloadObject,
 } from '../../FarmServiceTypes/respnse/errorPayloadObject';
 import { UserResponseDto } from './dto/response/user.response.dto';
+import { UserPersonalDataResponseDto } from './dto/response/userPersonalData.response.dto';
+import { AddressResponseDto } from '../commonEntities/dto/response/address.response.dto';
 
 interface DataFromReq {
   userLogin: string;
@@ -134,7 +136,7 @@ export class UserService {
     newUserPersonalData.user = Promise.resolve(newUser);
     newAddress.user = Promise.resolve(newUser);
 
-    this.mailer.sendMail({
+    /*this.mailer.sendMail({
       to: newUser.email,
       template: 'activateNewAccount',
       subject: `Welcome on board, let's activate your account`,
@@ -142,7 +144,7 @@ export class UserService {
         username: `${newUserPersonalData.name} ${newUserPersonalData.surname}`,
         activateLink: `http://localhost:3002/user/activate/${newAccount.activationCode}`,
       },
-    });
+    });*/
 
     await newUser.save();
     await newAddress.save();
@@ -190,5 +192,28 @@ export class UserService {
       code: ResponseCode.ProcessedCorrect,
       payload: await this._returnUser(user),
     } as ResponseObject<UserResponseDto>;
+  }
+
+  async personal_data(user: User) {
+    const data = await user.personalData;
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: new UserPersonalDataResponseDto({
+        name: data.name,
+        surname: data.surname,
+        phoneNumber: data.phoneNumber,
+      }),
+    } as ResponseObject<UserPersonalDataResponseDto>;
+  }
+
+  async address_data(user: User) {
+    const data = await user.address;
+    data.user = undefined;
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: new AddressResponseDto({
+        ...data,
+      }),
+    } as ResponseObject<AddressResponseDto>;
   }
 }

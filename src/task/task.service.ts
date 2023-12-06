@@ -12,9 +12,13 @@ import { User } from '../user/entities/user.entity';
 import { FieldResponseDto } from '../field/dto/response/field.response';
 import { FieldAddressResponseDto } from '../field-address/dto/response/field-address.response.dto';
 import { OrderStatus } from '../../FarmServiceTypes/Order/Enums';
+import { NotificationsService } from '../notifications/notifications.service';
+import { EventType } from '../../FarmServiceTypes/Notification/Enums';
 
 @Injectable()
 export class TaskService {
+  constructor(private readonly notification: NotificationsService) {}
+
   async create(createTaskDtos: CrateTaskCollection, company: Company) {
     const newTasks = createTaskDtos.tasks.map(
       (createTaskDto) =>
@@ -134,6 +138,15 @@ export class TaskService {
     if (!task) throw new ConflictException('Given Task Does not exist');
     task.openedAt = new Date();
     task.save();
+    const notificationDescription = `${user.id} Opened Task ${
+      task.id
+    } at ${new Date().toLocaleDateString()}`;
+    this.notification.create(
+      user,
+      notificationDescription,
+      'Started Task',
+      EventType.TaskOpened,
+    );
     return { code: ResponseCode.ProcessedCorrect } as ResponseObject;
   }
 
@@ -143,6 +156,15 @@ export class TaskService {
     if (!task) throw new ConflictException('Given Task Does not exist');
     task.closedAt = new Date();
     task.save();
+    const notificationDescription = `${user.id} Closed Task ${
+      task.id
+    } at ${new Date().toLocaleDateString()}`;
+    this.notification.create(
+      user,
+      notificationDescription,
+      'Closed Task',
+      EventType.TaskClosed,
+    );
     return { code: ResponseCode.ProcessedCorrect } as ResponseObject;
   }
 }

@@ -3,8 +3,6 @@ import {
   Column,
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -51,13 +49,13 @@ export class Notification extends BaseEntity {
     nullable: false,
   })
   @JoinColumn()
-  causer: User;
+  causer: Promise<User>;
 
-  @ManyToMany(() => User, (recipient) => recipient.addressedNotifications, {
+  /*@ManyToMany(() => User, (recipient) => recipient.addressedNotifications, {
     nullable: false,
   })
   @JoinTable({
     name: 'notifications_recipients',
   })
-  recipients: Promise<User[]>;
+  recipients: Promise<User[]>;*/
 }

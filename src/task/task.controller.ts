@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { ApiTags } from '@nestjs/swagger';
 import { Owner, Worker } from '../../decorators/auth.decorators';
-import { CrateTaskCollection } from './dto/create-task.dto';
+import { AssignMachinesDto, CrateTaskCollection } from './dto/create-task.dto';
 import { GetOwnedCompany, GetUser } from '../../decorators/user.decorators';
 import { Company } from '../company/entities/company.entity';
 import { DeleteTaskDto } from './dto/delete-task.dto';
@@ -53,6 +53,18 @@ export class TaskController {
   @Worker()
   async close(@Query('id') id: string, @GetUser() user: User) {
     return this.taskService.close(id, user);
+  }
+
+  @Post('assign_machine')
+  @Owner()
+  async assignMachines(@Body() assignationData: AssignMachinesDto) {
+    return this.taskService.assignMachines(assignationData);
+  }
+
+  @Get('machines')
+  @Owner()
+  async getMachines(@Query('id') taskId: string) {
+    return this.taskService.getMachines(taskId);
   }
 
   @Delete()

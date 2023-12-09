@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { CrateTaskCollection } from './dto/create-task.dto';
+import { AssignMachinesDto, CrateTaskCollection } from './dto/create-task.dto';
 import { Task } from './entities/task.entity';
 import { Company } from '../company/entities/company.entity';
 import {
@@ -14,6 +14,7 @@ import { FieldAddressResponseDto } from '../field-address/dto/response/field-add
 import { OrderStatus } from '../../FarmServiceTypes/Order/Enums';
 import { NotificationsService } from '../notifications/notifications.service';
 import { EventType } from '../../FarmServiceTypes/Notification/Enums';
+import { MachineResponseDto } from '../machine/dto/response/machine.response.dto';
 
 @Injectable()
 export class TaskService {
@@ -166,5 +167,32 @@ export class TaskService {
       EventType.TaskClosed,
     );
     return { code: ResponseCode.ProcessedCorrect } as ResponseObject;
+  }
+
+  async assignMachines(assignationData: AssignMachinesDto) {
+    const task = assignationData.taskId;
+    task.machines = Promise.resolve([...assignationData.machines]);
+    task.save();
+    return {
+      code: ResponseCode.ProcessedWithoutConfirmationWaiting,
+    } as ResponseObject;
+  }
+
+  async getMachines(taskId: string) {
+    const task = await Task.findOne({ where: { id: taskId } });
+    if (!task) throw new ConflictException('Cannot find given task');
+    console.log(
+      await Promise.all(
+        (await task.machines).map((m) => new MachineResponseDto(m)),
+      ),
+      taskId,
+      'WIELEKIATES',
+    );
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: await Promise.all(
+        (await task.machines).map((m) => new MachineResponseDto(m)),
+      ),
+    } as ResponseObject<MachineResponseDto[]>;
   }
 }

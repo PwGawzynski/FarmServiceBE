@@ -3,6 +3,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -12,6 +14,7 @@ import { Worker } from '../../worker/entities/worker.entity';
 import { TaskType } from '../../../FarmServiceTypes/Task/Enums';
 import { ConflictException } from '@nestjs/common';
 import { Company } from '../../company/entities/company.entity';
+import { Machine } from '../../machine/entities/machine.entity';
 
 @Entity()
 export class Task extends BaseEntity {
@@ -70,6 +73,10 @@ export class Task extends BaseEntity {
   @ManyToOne(() => Field, (field) => field.tasks, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'field_id' })
   field: Promise<Field>;
+
+  @ManyToMany(() => Machine, (machine) => machine.tasks, { cascade: true })
+  @JoinTable({ name: 'tasks_machines' })
+  machines: Promise<Machine[] | null>;
 
   @ManyToOne(() => Company, (company) => company.tasks)
   @JoinColumn({ name: 'company_id' })

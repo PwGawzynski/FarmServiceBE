@@ -15,6 +15,7 @@ import { CompanyAddress } from '../../company-address/entities/company-address.e
 import { ConflictException } from '@nestjs/common';
 import { Order } from '../../order/entities/order.entity';
 import { Task } from '../../task/entities/task.entity';
+import { Machine } from '../../machine/entities/machine.entity';
 
 @Entity()
 export class Company extends BaseEntity {
@@ -63,6 +64,9 @@ export class Company extends BaseEntity {
 
   @OneToMany(() => Task, (task) => task.company, { nullable: true })
   tasks?: Promise<Task[]>;
+
+  @OneToMany(() => Machine, (machine) => machine.company, { nullable: true })
+  machines?: Promise<Machine[]>;
 
   @Column({
     type: 'boolean',

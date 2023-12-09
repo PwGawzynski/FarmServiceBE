@@ -38,4 +38,10 @@ export class CompanyController {
   async getCompanyWorkers(@GetOwnedCompany() company: Company) {
     return this.companyService.getCompanyWorkers(company);
   }
+
+  @Get('machines')
+  @Owner()
+  async getMachines(@GetOwnedCompany() company: Company) {
+    return this.companyService.getMachines(company);
+  }
 }

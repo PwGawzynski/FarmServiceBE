@@ -1,10 +1,18 @@
 import { Order } from '../../order/entities/order.entity';
 import { Worker } from '../../worker/entities/worker.entity';
 import { Field } from '../../field/entities/field.entity';
-import { IsArray, IsEnum, IsUUID, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsDefined,
+  IsEnum,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 import { FindOrReject } from '../../../ClassValidatorCustomDecorators/FindOrReject.decorator';
 import { TaskType } from '../../../FarmServiceTypes/Task/Enums';
 import { Type } from 'class-transformer';
+import { Machine } from '../../machine/entities/machine.entity';
+import { Task } from '../entities/task.entity';
 
 export class CreateTaskDto {
   @IsUUID()
@@ -33,4 +41,14 @@ export class CrateTaskCollection {
   @Type(() => CreateTaskDto)
   @ValidateNested()
   tasks: Array<CreateTaskDto>;
+}
+
+export class AssignMachinesDto {
+  @FindOrReject(Task, { message: 'Cannot find given task' })
+  taskId: Task;
+
+  @IsArray()
+  @IsDefined()
+  @FindOrReject(Machine, { each: true })
+  machines: Array<Machine>;
 }

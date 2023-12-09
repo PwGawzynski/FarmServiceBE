@@ -6,6 +6,9 @@ export class MachineResponseWhiteList {
   }
 
   @Expose()
+  id: string;
+
+  @Expose()
   name: string;
 
   @Expose()

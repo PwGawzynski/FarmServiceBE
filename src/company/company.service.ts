@@ -11,6 +11,7 @@ import { CompanyResponseDto } from './dto/response/company.response.dto';
 import { WorkerResponseDto } from '../worker/dto/response/worker-response.dto';
 import { UserPersonalDataResponseDto } from '../user/dto/response/userPersonalData.response.dto';
 import { AddressResponseDto } from '../commonEntities/dto/response/address.response.dto';
+import { MachineResponseDto } from '../machine/dto/response/machine.response.dto';
 
 @Injectable()
 export class CompanyService {
@@ -84,5 +85,22 @@ export class CompanyService {
           }),
       ),
     );
+  }
+
+  async getMachines(company: Company) {
+    console.log(company, 'testsfe');
+    return {
+      code: ResponseCode.ProcessedCorrect,
+      payload: await Promise.all(
+        (
+          await company.machines
+        ).map(
+          async (machine) =>
+            new MachineResponseDto({
+              ...machine,
+            }),
+        ),
+      ),
+    } as ResponseObject<MachineResponseDto[]>;
   }
 }
